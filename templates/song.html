@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<div class="px-5 lt-songs-container ">
+    <h1 class="h3 text-light">{{ song.song_title }}</h1>
+    <pre>{{ song.lyrics }}</pre>
+    <p>By {{ creator }}</p>
+</div>
+
+<a href="{{ url_for('edit_song', song_id=song.id)}}" >
+    <button type="button" class="btn btn-success">
+        Edit Song
+    </button>
+</a>
+
+<a href="{{ url_for('delete_song', song_id=song.id)}}" >
+    <button type="button" class="btn btn-danger" >
+        Delete Song
+    </button>
+</a>
+
+{% endblock %}

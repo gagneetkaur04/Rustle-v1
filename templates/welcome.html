@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    <div class="welcome-text">
+        Welcome to Rustle
+    </div>
+
+    <div class="d-block">
+        <a href="{{ url_for('login') }} " class="btn login-button">Login</a>
+        <a href="{{ url_for('register') }} " class="btn register-button">Register</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,230 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<div class="user-profile">
+
+    <!-- USER INFO  -->
+    <div class="user-info">
+        <img src="/static/images/default_user.png" alt="User Profile Image" class="user-image">
+        <div class="user-details">
+            <h1>{{ user.username }}</h1>
+        </div>
+    </div>
+
+    <div class="tabs">
+
+        <!-- .......................................................... ALBUM TAB ............................................................... -->
+
+        <input type="radio" name="tabs" id="tabone" checked="checked">
+        <label for="tabone">My Albums</label>
+        <div class="tab">
+
+            <!-- ALBUM SECTION  -->
+            <div class="playlist-section">
+                <div class="playlist-details">
+                    <h3 class="playlist-title">My Albums</h3>
+                </div>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createAlbum">
+                    +
+                </button>
+            </div>
+
+            <!-- CREATE ALBUM MODAL -->
+            <div class="modal fade" id="createAlbum" tabindex="-1" aria-labelledby="createAlbumLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="playlist-section">
+                                <div class="playlist-details">
+                                    <h3 class="playlist-title">Create New Album</h3>
+                                </div>
+                            </div>
+
+                            <form action="" method="POST">
+                                {{ album_form.hidden_tag() }}
+
+                                <!-- TITLE  -->
+                                <div class="form-group">
+                                    {{ album_form.album_title.label(class='form-control-label') }}
+
+                                    {% if album_form.album_title.errors %}
+                                    {{ album_form.album_title(class='form-control form-control-lg is-invalid') }}
+
+                                    <div class="invalid-feedback">
+                                        {% for error in album_form.album_title.errors %}
+                                        <span> {{ error }} </span>
+                                        {% endfor %}
+                                    </div>
+
+                                    {% else %}
+                                    {{ album_form.album_title(class='form-control form-control-lg') }}
+
+                                    {% endif %}
+                                </div>
+                                <br>
+
+                                <!-- GENRE  -->
+                                <div class="form-group">
+                                    {{ album_form.genre.label(class='form-control-label') }}
+
+                                    {% if album_form.genre.errors %}
+                                    {{ album_form.genre(class='form-control form-control-lg is-invalid') }}
+
+                                    <div class="invalid-feedback">
+                                        {% for error in album_form.genre.errors %}
+                                        <span> {{ error }} </span>
+                                        {% endfor %}
+                                    </div>
+
+                                    {% else %}
+                                    {{ album_form.genre(class='form-control form-control-lg') }}
+
+                                    {% endif %}
+                                </div>
+                                <br>
+
+                                <!-- SUBMIT BUTTON  -->
+                                <div class="form-group">
+                                    {{ album_form.submit(class='btn btn-success') }}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALBUM CARDS  -->
+            <div class="card-container">
+                {% for album in albums %}
+                <a href="{{ url_for('get_album', album_id=album.id) }}" class="card">
+                    <img src="/static/images/default_album.jpg" alt="Album {{ album.album_id}} ">
+                    <div class="overlay">
+                        <div class="overlay-content">
+                            <h3 class="song-title">{{ album.album_name }}</h3>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <!-- .......................................................... SONG TAB ............................................................... -->
+
+        <input type="radio" name="tabs" id="tabtwo">
+        <label for="tabtwo">My Songs</label>
+
+        <div class="tab">
+
+            <!-- SONG SECTION  -->
+            <div class="playlist-section">
+                <div class="playlist-details">
+                    <h3 class="playlist-title">My Songs</h3>
+                </div>
+                <button type="button" class="btn btn-success">
+                    +
+                </button>
+            </div>
+
+            <!-- CREATE SONG MODAL -->
+            <div class="modal fade" id="createSong" tabindex="-1" aria-labelledby="createSongLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="playlist-section">
+                                <div class="playlist-details">
+                                    <h3 class="playlist-title">Create New Song</h3>
+                                </div>
+                            </div>
+
+                            <form action="" method="POST">
+                                {{ song_form.hidden_tag() }}
+
+                                <!-- TITLE  -->
+                                <div class="form-group">
+                                    {{ song_form.song_title.label(class='form-control-label') }}
+                    
+                                    {% if song_form.song_title.errors %}
+                                        {{ song_form.song_title(class='form-control form-control-lg is-invalid') }}
+                    
+                                        <div class="invalid-feedback">
+                                            {% for error in song_form.song_title.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    
+                                    {% else %}
+                                        {{ song_form.song_title(class='form-control form-control-lg') }}
+                    
+                                    {% endif %}
+                                </div>
+                    
+                                <!-- LYRICS  -->
+                                <div class="form-group">
+                                    {{ song_form.lyrics.label(class='form-control-label') }}
+                    
+                                    {% if song_form.lyrics.errors %}
+                                        {{ song_form.lyrics(class='form-control form-control-lg is-invalid') }}
+                    
+                                        <div class="invalid-feedback">
+                                            {% for error in song_form.lyrics.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    
+                                    {% else %}
+                                        {{ song_form.lyrics(class='form-control form-control-lg') }}
+                    
+                                    {% endif %}
+                                </div>
+                    
+                                <!-- DURATION  -->
+                                <div class="form-group">
+                                    {{ song_form.duration.label(class='form-control-label') }}
+                    
+                                    {% if song_form.duration.errors %}
+                                        {{ song_form.duration(class='form-control form-control-lg is-invalid') }}
+                    
+                                        <div class="invalid-feedback">
+                                            {% for error in song_form.duration.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    
+                                    {% else %}
+                                        {{ song_form.duration(class='form-control form-control-lg') }}
+                    
+                                    {% endif %}
+                                </div>
+                    
+                                <!-- SUBMIT BUTTON  -->
+                                <div class="form-group">
+                                    {{ song_form.submit(class='btn btn-success') }}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- SONG CARDS  -->
+            <div class="card-container">
+                {% for song in songs %}
+                <a href="{{ url_for('get_song', song_id=song.id) }}" class="card">
+                    <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
+                    <div class="overlay">
+                        <div class="overlay-content">
+                            <h3 class="song-title">{{ song.song_title }}</h3>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'layout.html' %} 
+
+{% block main %}
+
+
+    <form action="" method="POST" class="m-100">
+        {{ form.hidden_tag() }}
+        <!-- TITLE  -->
+        <div class="form-group">
+            {{ form.playlist_title.label(class='form-control-label') }}
+
+            {% if form.playlist_title.errors %}
+            {{ form.playlist_title(class='form-control form-control-lg is-invalid') }}
+
+            <div class="invalid-feedback">
+                {% for error in form.playlist_title.errors %}
+                <span> {{ error }} </span>
+                {% endfor %}
+            </div>
+
+            {% else %}
+            {{ form.playlist_title(class='form-control form-control-lg') }}
+
+            {% endif %}
+        </div>
+        <br>
+
+        <!-- SUBMIT BUTTON  -->
+        <div class="form-group">
+            {{ form.submit(class='btn btn-success') }}
+        </div>
+
+    </form>
+
+{% endblock %}

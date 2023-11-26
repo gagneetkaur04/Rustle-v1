@@ -1,0 +1,76 @@
+{% extends 'layout.html' %} 
+
+{% block main %}
+
+
+    <form action="" method="POST" class="m-100">
+        {{ form.hidden_tag() }}
+
+        <!-- TITLE  -->
+        <div class="form-group">
+            {{ form.song_title.label(class='form-control-label') }}
+
+            {% if form.song_title.errors %}
+            {{ form.song_title(class='form-control form-control-lg is-invalid') }}
+
+            <div class="invalid-feedback">
+                {% for error in form.song_title.errors %}
+                <span> {{ error }} </span>
+                {% endfor %}
+            </div>
+
+            {% else %}
+            {{ form.song_title(class='form-control form-control-lg') }}
+
+            {% endif %}
+        </div>
+        <br>
+
+        <!-- LYRICS  -->
+        <div class="form-group">
+            {{ form.lyrics.label(class='form-control-label') }}
+
+            {% if form.lyrics.errors %}
+            {{ form.lyrics(class='form-control form-control-lg is-invalid') }}
+
+            <div class="invalid-feedback">
+                {% for error in form.lyrics.errors %}
+                <span> {{ error }} </span>
+                {% endfor %}
+            </div>
+
+            {% else %}
+            {{ form.lyrics(class='form-control form-control-lg') }}
+
+            {% endif %}
+        </div>
+        <br>
+
+        <!-- DURATION  -->
+        <div class="form-group">
+            {{ form.duration.label(class='form-control-label') }}
+
+            {% if form.duration.errors %}
+            {{ form.duration(class='form-control form-control-lg is-invalid') }}
+
+            <div class="invalid-feedback">
+                {% for error in form.duration.errors %}
+                <span> {{ error }} </span>
+                {% endfor %}
+            </div>
+
+            {% else %}
+            {{ form.duration(class='form-control form-control-lg') }}
+
+            {% endif %}
+        </div>
+        <br>
+
+        <!-- SUBMIT BUTTON  -->
+        <div class="form-group">
+            {{ form.submit(class='btn btn-success') }}
+        </div>
+
+    </form>
+
+{% endblock %}

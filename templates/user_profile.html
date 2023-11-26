@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+  <div class="user-profile">
+    <div class="user-info">
+      <img src="/static/images/default_user.png" alt="User Profile Image" class="user-image">
+      <div class="user-details">
+        <h1>{{ user.username }}</h1>
+      </div>
+    </div>
+
+
+    <div class="tabs">
+
+        <!-- .......................................................... PLAYLIST TAB ............................................................... -->
+
+        <input type="radio" name="tabs" id="tabone" checked="checked">
+        <label for="tabone">My Playlists</label>
+        <div class="tab">
+
+        <!-- PLAYLIST SECTION  -->
+        <div class="playlist-section">
+          <div class="playlist-details">
+            <h3 class="playlist-title">My Playlists</h3>
+          </div>
+          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createPlaylistModal">
+            +
+          </button>
+        </div>
+
+        <!-- CREATE PLAYLIST MODAL -->
+        <div class="modal fade" id="createPlaylistModal" tabindex="-1" aria-labelledby="createPlaylistLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="playlist-section">
+                  <div class="playlist-details">
+                    <h3 class="playlist-title">Create New Playlist</h3>
+                  </div>
+                </div>
+
+                <form action="" method="POST">
+                  {{ form.hidden_tag() }}
+                  <!-- TITLE  -->
+                  <div class="form-group">
+                    {{ form.playlist_title.label(class='form-control-label') }}
+
+                    {% if form.playlist_title.errors %}
+                    {{ form.playlist_title(class='form-control form-control-lg is-invalid') }}
+
+                    <div class="invalid-feedback">
+                      {% for error in form.playlist_title.errors %}
+                      <span> {{ error }} </span>
+                      {% endfor %}
+                    </div>
+
+                    {% else %}
+                    {{ form.playlist_title(class='form-control form-control-lg') }}
+
+                    {% endif %}
+                  </div>
+                  <br>
+
+                  <!-- SUBMIT BUTTON  -->
+                  <div class="form-group">
+                    {{ form.submit(class='btn btn-success') }}
+                  </div>
+
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- PLAYLIST CARDS  -->
+        <div class="card-container">
+          {% for playlist in playlists %}
+            <a href="{{ url_for('get_playlist', playlist_id=playlist.id ) }}" class="card">
+              <img src="/static/images/default_playlist.png" alt="Song 1">
+              <div class="overlay">
+                <div class="overlay-content">
+                  <h3 class="song-title">{{ playlist.playlist_title}}</h3>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
