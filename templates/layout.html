@@ -36,38 +36,42 @@
               <img src="/static/images/app-logo.jpg" class="logo-img" alt="">
               <h3 class="logo-text d-inline-block mt-3">Rustle</h3>
             </div>
-          
             <ul class="list-unstyled components">
-              <li class="active">
-                <a href="#discover"><i class="fas fa-headphones"></i> Discover</a>
+
+              <li>
+                <a href="{{ url_for('home_user') }}"><i class="fas fa-headphones"></i> Discover</a>
               </li>
               <li>
-                <a href="#genres"><i class="fas fa-music"></i> Genres</a>
+                  <a href="#"><i class="fas fa-user-friends"></i> Artists</a>
               </li>
               <li>
-                <a href="#artists"><i class="fas fa-user-friends"></i> Artists</a>
+                <a href="#"><i class="fas fa-compact-disc"></i> Albums </a>
               </li>
               <li>
-                <a href="#playlists"><i class="fas fa-list"></i> Playlists</a>
+                  <a href="{{ url_for( 'user_profile') }}"><i class="fas fa-list"></i> Playlists</a>
               </li>
-              <li>
-                <a href="#favorites"><i class="fas fa-heart"></i> Favorites</a>
-              </li>
+
+              {% if current_user.is_creator %}
+
+                <div class="border-top  mt-2">
+                  <h5 class="mx-4 mt-4">Artist Section</h5>
+                  <li>
+                      <a href="{{ url_for('creator_profile',_anchor='tabone') }}"><i class="fas fa-compact-disc"></i> My Albums </a>
+                  </li>
+                  <li>
+                      <a href="{{ url_for( 'creator_profile', _anchor='tabtwo') }}"><i class="fas fa-music"></i> My Songs </a>
+                  </li>
+                </div>
+
+              {% endif %}
+
             </ul>
           </nav>
         </div>
-        <div class="col-md-2">
-        </div>
 
+        <div class="col-md-2"></div>
 
-
-        <!-- ...............................................................HEADEER LAYOUT.........................................................  -->
-
-
-        
-        
-        
-        <!-- ...............................................................MAIN CONTENT LAYOUT.........................................................  -->
+        <!-- .......................................................HEADER AND MAIN CONTENT LAYOUT.........................................................  -->
         
         <div class="col-md-10 p-0 main-content">
           <header class="py-3 mb-3 position-fixed">

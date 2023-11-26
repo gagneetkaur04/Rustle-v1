@@ -123,7 +123,7 @@
                 <div class="playlist-details">
                     <h3 class="playlist-title">My Songs</h3>
                 </div>
-                <button type="button" class="btn btn-success">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createSong">
                     +
                 </button>
             </div>
@@ -139,7 +139,7 @@
                                 </div>
                             </div>
 
-                            <form action="" method="POST">
+                            <form action="" method="POST" enctype="multipart/form-data">
                                 {{ song_form.hidden_tag() }}
 
                                 <!-- TITLE  -->
@@ -159,6 +159,12 @@
                                         {{ song_form.song_title(class='form-control form-control-lg') }}
                     
                                     {% endif %}
+                                </div>
+
+                                <!-- SONG FILE  -->
+                                <div class="form-group">
+                                    {{ song_form.audio_file.label(class='form-control-label') }}
+                                    {{ song_form.audio_file(class='form-control') }}
                                 </div>
                     
                                 <!-- LYRICS  -->
@@ -198,6 +204,34 @@
                     
                                     {% endif %}
                                 </div>
+
+                                <!-- ALBUM SELECTION  -->
+                                <div class="form-group">
+                                    {{ song_form.album.label(class='form-control-label') }}
+
+                                    {% if song_form.album.errors %}
+                                        {{ song_form.album(class='form-control form-control-lg is-invalid') }}
+                    
+                                        <div class="invalid-feedback">
+                                            {% for error in song_form.album.errors %}
+                                                <span> {{ error }} </span>
+                                            {% endfor %}
+                                        </div>
+                                    
+                                    {% else %}
+                                        <select id="album" name="album" class="form-control">
+                                            {% for id, name in song_form.album.choices %}
+                                                {% if id == -1 %}
+                                                    <option value="{{ id }}" selected>{{ name }}</option>
+                                                {% else %}
+                                                    <option value="{{ id }}">{{ name }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                    
+                                    {% endif %}                                   
+                                </div>
+                                <br>
                     
                                 <!-- SUBMIT BUTTON  -->
                                 <div class="form-group">
@@ -218,6 +252,9 @@
                     <div class="overlay">
                         <div class="overlay-content">
                             <h3 class="song-title">{{ song.song_title }}</h3>
+                            <audio controls>
+                                <source src="{{ song.song_path }}" type="audio/mp3">
+                            </audio>
                         </div>
                     </div>
                 </a>

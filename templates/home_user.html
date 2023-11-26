@@ -4,10 +4,23 @@
 {% block main %}
 
     <div class="px-5 lt-songs-container ">
-        <h1 class="h3 text-light">Latest Songs</h1>
+        <h1 class="h3 text-light mb-4">Latest Songs</h1>
         <ul class="song-list">
             {% for song in latest_songs %}
-                <li class="song-item">{{ song.song_title }} (Released on {{ song.date_created.strftime('%Y-%m-%d') }})</li>
+                <!-- <h6 class="mt-4">{{ song.song_title }}</h6> -->
+                <div class="card mb-4 shadow-sm">
+                    <img class="card-img-top" src="/static/images/default_song.jpg" alt="{{ song.song_title }}">
+                    <div class="card-body">
+                        <audio controls>
+                            <source src="{{ song.song_path }}" type="audio/mp3">
+                        </audio>
+                    </div>
+                    <div class="overlay">
+                        <div class="overlay-content">
+                            <h3 class="song-title">{{ song.song_title }}</h3>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
         </ul>
     </div>

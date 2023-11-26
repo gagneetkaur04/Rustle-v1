@@ -6,7 +6,7 @@
     <h1 class="h3 text-light">{{ album.album_name }}</h1>
     <ul class="song-list">
         {% for song in songs %}
-            <li class="song-item">{{ song.title }} (Released on {{ song.date_created.strftime('%Y-%m-%d') }})</li>
+            <li class="song-item">{{ song.song_title }} (Released on {{ song.date_created.strftime('%Y-%m-%d') }})</li>
         {% endfor %}
     </ul>
 </div>
@@ -18,12 +18,12 @@
 </a>
 
 <a href="{{ url_for('delete_album', album_id=album.id)}}" >
-    <button type="button" class="btn btn-success" >
+    <button type="button" class="btn btn-danger" >
         Delete Album
     </button>
 </a>
 
-<a href="{{ url_for('') }}" >
+<a href="#" >
     <button type="button" class="btn btn-info" >
         Add Song
     </button>

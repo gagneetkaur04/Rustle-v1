@@ -1,12 +1,13 @@
+import logging, os, secrets
+from config import Config
+from database import db
+from datetime import datetime
 from flask import render_template, request, current_app as app, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
-from database import db
 from models import User, Song, Playlist, Album
 from forms import RegistrationForm, LoginForm, PlaylistForm, AlbumForm, SongForm, EditPlaylistForm, EditAlbumForm, EditSongForm
+from werkzeug.utils import secure_filename
 from app import login_manager, bcrypt, app
-import logging
-from datetime import datetime
-
 
 # Set the log level and log format
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -22,6 +23,16 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+def save_audio(form_audio):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_audio.filename)
+    audio_fn = random_hex + f_ext
+    audio_path = os.path.join(app.config['UPLOAD_FOLDER'], audio_fn)
+
+    form_audio.save(audio_path)
+
+    return audio_path
+
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ROUTES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 # Welcome Page Route
@@ -31,8 +42,6 @@ def welcome():
         return redirect(url_for('home_user'))
     
     return render_template('welcome.html')
-
-
 
 # Register Route
 @app.route('/register', methods=['GET', 'POST'])
@@ -61,8 +70,6 @@ def register():
 
     return render_template('register.html', form=form)
 
-
-
 # Login Route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -83,9 +90,6 @@ def login():
 
     return render_template('login.html', form=form)
 
-
-
-
 # Logout User Route
 @app.route("/logout")
 @login_required
@@ -97,16 +101,16 @@ def logout():
 # ####################################################### USER ROUTES #########################################################
 
 
-# User Dashboard
+# User Home Page
 @app.route('/home_user', methods=['GET', 'POST'])
 @login_required
 def home_user():
 
-    if request.method == 'GET':
-        user = current_user
+    user = current_user
 
-        latest_songs = Song.query.order_by(Song.date_created.desc()).limit(10).all()
-        return render_template('home_user.html', user=user, latest_songs=latest_songs)
+    latest_songs = Song.query.order_by(Song.date_created.desc()).limit(10).all()
+
+    return render_template('home_user.html', user=user, latest_songs=latest_songs)
     
 
 # Become Artist
@@ -126,7 +130,7 @@ def become_artist():
 
 # ................................... USER PLAYLIST ROUTES ......................................
 
-# User Profile and Create Playist
+# User Profile/Dashboard and Create Playist
 @app.route('/user', methods=['GET', 'POST'])
 @login_required
 def user_profile():
@@ -154,8 +158,6 @@ def user_profile():
         
         return render_template('user_profile.html', form=form)
     
-
-
 # Get Playlist ---> To view the songs in the playlist
 @app.route('/user/playlist/<int:playlist_id>', methods=['GET', 'POST'])
 @login_required
@@ -169,9 +171,6 @@ def get_playlist(playlist_id):
         songs = playlist.songs
 
         return render_template('playlist.html', user=user, playlist=playlist, songs=songs)
-
-
-    
 
 # Update Playlist --> To edit the name of the playlist
 @app.route('/user/playlist/<int:playlist_id>/update', methods=['GET', 'POST'])
@@ -191,8 +190,6 @@ def edit_playlist(playlist_id):
         return redirect(url_for('get_playlist', playlist_id=playlist_id))
         
     return render_template('playlist_edit.html', form=form)
-
-
 
 # Delete Playlist --> To delete the playlist
 @app.route('/user/playlist/<int:playlist_id>/delete', methods=['GET', 'POST'])
@@ -220,11 +217,15 @@ def creator_profile():
     album_form = AlbumForm()
     song_form = SongForm()
 
+    albums = [(album.id, album.album_name) for album in Album.query.filter_by(creator_id=user.id).all()]
+    albums.insert(0, (-1, 'Singles'))
+    song_form.album.choices = albums
+
     if request.method == 'GET':
         albums = Album.query.filter_by(creator_id=user.id).all()
         songs = Song.query.filter_by(creator_id=user.id).all()
 
-        return render_template('creator_profile.html', user=user, albums=albums, songs=songs, album_form=album_form)
+        return render_template('creator_profile.html', user=user, albums=albums, songs=songs, album_form=album_form, song_form=song_form)
 
     elif request.method == 'POST':
 
@@ -247,10 +248,13 @@ def creator_profile():
         
         elif song_form.validate_on_submit():
 
-            song = Song(album_id=1000,
+            if song_form.audio_file.data:
+                audio_path = save_audio(song_form.audio_file.data)
+
+            song = Song(album_id=song_form.album.data,
                         creator_id=current_user.id,
                         song_title=song_form.song_title.data,
-                        song_path="asad.mp3",
+                        song_path=audio_path,
                         lyrics=song_form.lyrics.data,
                         duration=song_form.duration.data,
                         date_created=datetime.now())
@@ -261,9 +265,10 @@ def creator_profile():
             logger.info('song: %s, user: %s ', song_form.song_title.data, current_user.id)
 
             flash('Your song has been added!', 'success')
-            return redirect(url_for('creator_profile'))
+            return redirect(url_for('creator_profile', _anchor='tabtwo'))
 
-    return render_template('creator_profile.html', album_form=album_form, user=user)
+
+    return render_template('creator_profile.html', album_form=album_form, user=user, song_form=song_form)
 
 
 # ................................... CREATOR ALBUM ROUTES ......................................
@@ -320,10 +325,7 @@ def delete_album(album_id):
 @login_required
 def get_song(song_id):
     
-    # song = Song.query.filter_by(id=song_id).first()
     song = db.session.query(Song, User.username).join(User, Song.creator_id == User.id).filter(Song.id == song_id).first()
-
-
     return render_template('song.html', user=current_user, song=song[0], creator=song[1])
 
 # Update song --> To edit the name of the song
@@ -335,12 +337,16 @@ def edit_song(song_id):
 
     form = EditSongForm(obj=song)
 
+    albums = [(album.id, album.album_name) for album in Album.query.filter_by(creator_id=current_user.id).all()]
+    albums.insert(0, (-1, 'Singles'))
+    form.album.choices = albums
+
     if form.validate_on_submit():
 
-        # song.song_title = form.song_title.data
-        # song.lyrics = form.lyrics.data
-        # song.duration = form.duration.data
-        form.populate_obj(song)
+        song.song_title = form.song_title.data
+        song.lyrics = form.lyrics.data
+        song.duration = form.duration.data
+        song.album_id = form.album.data
 
         db.session.commit()
 

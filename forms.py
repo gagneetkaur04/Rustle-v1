@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from models import User
-from wtforms import StringField, PasswordField, SubmitField, RadioField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAreaField, FileField, RadioField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 
 class RegistrationForm(FlaskForm):
@@ -41,13 +41,13 @@ class EditPlaylistForm(FlaskForm):
 
 class AlbumForm(FlaskForm):
     album_title = StringField('Album Title', validators=[DataRequired(), Length(min=2, max=20)])
-    genre = StringField('Genre', validators=[DataRequired(), Length(min=2, max=20)])
+    genre = StringField('Genre')
 
     submit = SubmitField('Create Album')
 
 class EditAlbumForm(FlaskForm):
     album_title = StringField('Album Title', validators=[DataRequired(), Length(min=2, max=20)])
-    genre = StringField('Genre', validators=[DataRequired(), Length(min=2, max=20)])
+    genre = StringField('Genre')
 
     submit = SubmitField('Update')
 
@@ -56,18 +56,23 @@ class SongForm(FlaskForm):
     song_title = StringField('Song Title', validators=[DataRequired(), Length(min=2, max=20)])
     lyrics = TextAreaField('Lyrics', validators=[DataRequired()])
     duration = StringField('Song Duration', validators=[DataRequired(), Length(min=2, max=20)])
-
-    # albums = [('album_1', 'Album 1'), ('album_2', 'Album 2')]
-    # album = RadioField('Album  ', choices=albums)
+    album = SelectField('Select Album', coerce=int)
+    audio_file = FileField('Audio File', validators=[DataRequired()])
 
     submit = SubmitField('Create Song')
+
+    def validate_file(self, audio_file):
+        allowed_extensions = ['mp3']
+        if audio_file.data:
+            file_ext = audio_file.data.filename.rsplit('.', 1)[1].lower()
+            if file_ext not in allowed_extensions:
+                raise ValidationError('File must be in MP3 format')
 
 class EditSongForm(FlaskForm):
     song_title = StringField('Song Title', validators=[DataRequired(), Length(min=2, max=20)])
     lyrics = TextAreaField('Lyrics', validators=[DataRequired()])
     duration = StringField('Song Duration', validators=[DataRequired(), Length(min=2, max=20)])
-
-    # albums = [('album_1', 'Album 1'), ('album_2', 'Album 2')]
-    # album = RadioField('Album  ', choices=albums)
+    album = SelectField('Select Album', coerce=int)
 
     submit = SubmitField('Update')
+

@@ -3,7 +3,7 @@
 {% block main %}
 
 
-    <form action="" method="POST" class="m-100">
+    <form action="" method="POST" class="m-100" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
         <!-- TITLE  -->
@@ -63,6 +63,34 @@
             {{ form.duration(class='form-control form-control-lg') }}
 
             {% endif %}
+        </div>
+        <br>
+        
+        <!-- ALBUM SELECTION  -->
+        <div class="form-group">
+            {{ form.album.label(class='form-control-label') }}
+
+            {% if form.album.errors %}
+                {{ form.album(class='form-control form-control-lg is-invalid') }}
+
+                <div class="invalid-feedback">
+                    {% for error in form.album.errors %}
+                        <span> {{ error }} </span>
+                    {% endfor %}
+                </div>
+            
+            {% else %}
+                <select id="album" name="album" class="form-control">
+                    {% for id, name in form.album.choices %}
+                        {% if id == -1 %}
+                            <option value="{{ id }}" selected>{{ name }}</option>
+                        {% else %}
+                            <option value="{{ id }}">{{ name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+
+            {% endif %}                                   
         </div>
         <br>
 
