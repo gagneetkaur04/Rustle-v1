@@ -31,3 +31,5 @@ WHAT I HAVE TO DO ( which i left in between ):
 - while updating album in songs, the default selected choice should be the previous album
 
 - Flash Messages
+
+- When i delete a song, the audio file also should get deleted from the folder - audios
