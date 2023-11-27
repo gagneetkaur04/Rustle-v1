@@ -166,7 +166,9 @@ def get_playlist(playlist_id):
 
     user = current_user
     addsong_form=AddSongToPlaylistForm()
-    edit_playlist_form = EditPlaylistForm()
+
+    playlist = Playlist.query.filter_by(id=playlist_id).first()
+    edit_playlist_form = EditPlaylistForm(obj=playlist)
 
     playlist = Playlist.query.filter_by(id=playlist_id).first()
     songs = playlist.songs
@@ -187,6 +189,7 @@ def get_playlist(playlist_id):
 
 
     if edit_playlist_form.validate_on_submit():
+
         playlist.playlist_title = edit_playlist_form.playlist_title.data
         db.session.commit()
 
