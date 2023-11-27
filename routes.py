@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import render_template, request, current_app as app, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
 from models import User, Song, Playlist, Album
-from forms import RegistrationForm, LoginForm, PlaylistForm, AlbumForm, SongForm, EditPlaylistForm, EditAlbumForm, EditSongForm
+from forms import *
 from werkzeug.utils import secure_filename
 from app import login_manager, bcrypt, app
 
@@ -158,38 +158,51 @@ def user_profile():
         
         return render_template('user_profile.html', form=form)
     
-# Get Playlist ---> To view the songs in the playlist
+
+# Get Playlist ---> To view the songs in the playlist; Add Song to Playlist; Edit Playlist
 @app.route('/user/playlist/<int:playlist_id>', methods=['GET', 'POST'])
 @login_required
 def get_playlist(playlist_id):
 
     user = current_user
-
-    if request.method == 'GET':
-
-        playlist = Playlist.query.filter_by(id=playlist_id).first()
-        songs = playlist.songs
-
-        return render_template('playlist.html', user=user, playlist=playlist, songs=songs)
-
-# Update Playlist --> To edit the name of the playlist
-@app.route('/user/playlist/<int:playlist_id>/update', methods=['GET', 'POST'])
-@login_required
-def edit_playlist(playlist_id):
+    addsong_form=AddSongToPlaylistForm()
+    edit_playlist_form = EditPlaylistForm()
 
     playlist = Playlist.query.filter_by(id=playlist_id).first()
+    songs = playlist.songs
 
-    form = EditPlaylistForm(obj=playlist)
+    addsong_form.selected_song.choices = [(song.id, song.song_title) for song in Song.query.all()]
 
-    if form.validate_on_submit():
+    if addsong_form.validate_on_submit():
+        selected_song = addsong_form.selected_song.data
+        playlist_id = playlist.id
 
-        playlist.playlist_title = form.playlist_title.data
+        for song_id in selected_song:
+            song = Song.query.filter_by(id=song_id).first()
+            playlist.songs.append(song)
+            db.session.commit()
+
+        flash('Your song have been added to the playlist!', 'success')
+        return redirect(url_for('get_playlist', playlist_id=playlist_id))
+
+
+    if edit_playlist_form.validate_on_submit():
+        playlist.playlist_title = edit_playlist_form.playlist_title.data
         db.session.commit()
 
         flash('Your playlist has been edited!', 'success')
         return redirect(url_for('get_playlist', playlist_id=playlist_id))
-        
-    return render_template('playlist_edit.html', form=form)
+
+
+
+    return render_template('playlist.html', user=user, 
+                                            playlist=playlist, 
+                                            songs=songs, 
+                                            addsong_form=addsong_form, 
+                                            edit_playlist_form=edit_playlist_form,
+                                            all_songs=addsong_form.selected_song.choices)
+
+
 
 # Delete Playlist --> To delete the playlist
 @app.route('/user/playlist/<int:playlist_id>/delete', methods=['GET', 'POST'])
@@ -203,7 +216,6 @@ def delete_playlist(playlist_id):
         flash('Your playlist has been deleted!', 'success')
         return redirect(url_for('user_profile'))
     
-
 
 
 # ####################################################### CREATOR ROUTES #########################################################
@@ -274,36 +286,29 @@ def creator_profile():
 # ................................... CREATOR ALBUM ROUTES ......................................
 
 # Get album ---> To view the songs in the album
-@app.route('/album/<int:album_id>', methods=['GET'])
+@app.route('/album/<int:album_id>', methods=['GET', 'POST'])
 @login_required
 def get_album(album_id):
 
     album= Album.query.filter_by(id=album_id).first()
     songs = Song.query.filter_by(album_id=album_id).all()
 
-    return render_template('album.html', user=current_user, songs=songs, album=album)
+    editAlbumForm = EditAlbumForm(obj=album)
 
-# Update album --> To edit the name of the album
-@app.route('/album/<int:album_id>/update', methods=['GET', 'POST'])
-@login_required
-def edit_album(album_id):
+    if request.method == 'POST':
 
-    album = Album.query.get_or_404(album_id)
+        if editAlbumForm.validate_on_submit():
 
-    form = EditAlbumForm(obj=album)
+            album.album_name = editAlbumForm.album_title.data
+            album.genre = editAlbumForm.genre.data
 
-    if form.validate_on_submit():
+            db.session.commit()
 
-        album.album_name = form.album_title.data
-        album.genre = form.genre.data
+            flash('Your album has been edited!', 'success')
+            return redirect(url_for('get_album', album_id=album_id))
 
-        db.session.commit()
-
-        flash('Your album has been edited!', 'success')
-        return redirect(url_for('get_album', album_id=album_id))
-    
-    form.album_title.data = album.album_name
-    return render_template('album_edit.html', form=form)   
+    editAlbumForm.album_title.data = album.album_name
+    return render_template('album.html', user=current_user, songs=songs, album=album, editAlbumForm=editAlbumForm)
 
 # Delete album --> To delete the album
 @app.route('/album/<int:album_id>/delete', methods=['GET', 'POST'])
@@ -327,6 +332,7 @@ def get_song(song_id):
     
     song = db.session.query(Song, User.username).join(User, Song.creator_id == User.id).filter(Song.id == song_id).first()
     return render_template('song.html', user=current_user, song=song[0], creator=song[1])
+
 
 # Update song --> To edit the name of the song
 @app.route('/song/<int:song_id>/update', methods=['GET', 'POST'])
@@ -366,8 +372,6 @@ def delete_song(song_id):
 
     flash('Your song has been deleted!', 'success')
     return redirect(url_for('creator_profile'))
-
-
 
 
 

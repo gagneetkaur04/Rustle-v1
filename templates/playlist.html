@@ -4,23 +4,104 @@
 
 <div class="px-5 lt-songs-container ">
     <h1 class="h3 text-light">{{ playlist.playlist_title }}</h1>
-    <ul class="song-list">
-        {% for song in songs %}
-            <li class="song-item">{{ song.title }} (Released on {{ song.date_created.strftime('%Y-%m-%d') }})</li>
-        {% endfor %}
-    </ul>
-</div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#songModal">Add Song to Playlist</button>
 
-<a href="{{ url_for('edit_playlist', playlist_id=playlist.id)}}" >
-    <button type="button" class="btn btn-success">
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPlaylistModal">
         Edit Playlist
     </button>
-</a>
 
-<a href="{{ url_for('delete_playlist', playlist_id=playlist.id)}}" >
-    <button type="button" class="btn btn-danger" >
-        Delete Playlist
-    </button>
-</a>
+    <a href="{{ url_for('delete_playlist', playlist_id=playlist.id)}}" >
+        <button type="button" class="btn btn-danger" >
+            Delete Playlist
+        </button>
+    </a>
+
+    <ul class="song-list">
+        {% for song in songs %}
+            <li class="song-item">{{ song.song_title }} (Released on {{ song.date_created.strftime('%Y-%m-%d') }})
+            </li>
+        {% endfor %}
+    </ul>
+    
+</div>
+
+
+
+<!-- ...........................................................MODALS...........................................................  -->
+
+
+<!-- ADD SONG TO PLAYLIST MODAL  -->
+<div class="modal fade" id="songModal" tabindex="-1" aria-labelledby="songModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="playlist-section">
+                    <div class="playlist-details">
+                        <h3 class="playlist-title">Add Song to Playlist</h3>
+                    </div>
+                </div>
+                <form action="" method="POST">
+                    {{ addsong_form.hidden_tag() }}
+                    <select id="song" name="song" class="form-control">
+                        {% for id, name in all_songs %}
+                                <option value="{{ id }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <!-- SUBMIT BUTTON  -->
+                    <div class="form-group">
+                        {{ addsong_form.submit(class='btn btn-success') }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT PLAYLIST MODAL  -->
+<div class="modal fade" id="editPlaylistModal" tabindex="-1" aria-labelledby="editPlaylistModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="playlist-section">
+                    <div class="playlist-details">
+                        <h3 class="playlist-title">Edit Playlist</h3>
+                    </div>
+                </div>
+
+                <form action="" method="POST">
+                    {{ edit_playlist_form.hidden_tag() }}
+                    <!-- TITLE  -->
+                    <div class="form-group">
+                        {{ edit_playlist_form.playlist_title.label(class='form-control-label') }}
+            
+                        {% if edit_playlist_form.playlist_title.errors %}
+                        {{ edit_playlist_form.playlist_title(class='form-control form-control-lg is-invalid') }}
+            
+                        <div class="invalid-feedback">
+                            {% for error in edit_playlist_form.playlist_title.errors %}
+                            <span> {{ error }} </span>
+                            {% endfor %}
+                        </div>
+            
+                        {% else %}
+                        {{ edit_playlist_form.playlist_title(class='form-control form-control-lg') }}
+            
+                        {% endif %}
+                    </div>
+                    <br>
+            
+                    <!-- SUBMIT BUTTON  -->
+                    <div class="form-group">
+                        {{ edit_playlist_form.submit(class='btn btn-success') }}
+                    </div>
+            
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}

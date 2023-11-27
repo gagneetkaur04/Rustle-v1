@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from models import User
-from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAreaField, FileField, RadioField
+from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAreaField, FileField, HiddenField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 
 class RegistrationForm(FlaskForm):
@@ -76,3 +76,11 @@ class EditSongForm(FlaskForm):
 
     submit = SubmitField('Update')
 
+
+class AddToPlaylistForm(FlaskForm):
+    playlist = SelectField('Playlist', coerce=int)
+    submit = SubmitField('Add to Playlist')
+
+class AddSongToPlaylistForm(FlaskForm):
+    selected_song = SelectField('Select song', coerce=int, choices=[])
+    submit = SubmitField('Add Song to Playlist')
