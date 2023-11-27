@@ -159,6 +159,18 @@ body {
   right: 0;
 }
 
+.header .search-box{
+  width: 50%;
+  margin-left: 25%;
+  background-color: #ffffff7b;
+  border: none;
+  color: rgb(35, 53, 52);
+}
+
+input[type="search"]::placeholder {
+  color: #323030; /* Replace #999 with the desired color code */
+}
+
 .main-content {
   padding-top: 70px;
   background: #215252;
