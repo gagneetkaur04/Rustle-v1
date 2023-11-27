@@ -23,116 +23,13 @@
 
 <body>
 
-  {% if current_user.is_authenticated %}
+  {% if not current_user.is_authenticated %}
 
-    <div class="container h-100">
-      <div class="row h-100">
-
-        <!-- ...................................................SIDEBAR LAYOUT............................................................. -->
-        
-        <div class="col-md-2 p-0 position-fixed top-0 bottom-0 z-1">
-          <nav id="sidebar" class="w-100 ">
-            <div class="sidebar-header">
-              <img src="/static/images/app-logo.jpg" class="logo-img" alt="">
-              <h3 class="logo-text d-inline-block mt-3">Rustle</h3>
-            </div>
-            <ul class="list-unstyled components">
-
-              <li>
-                <a href="{{ url_for('home_user') }}"><i class="fas fa-headphones"></i> Discover</a>
-              </li>
-              <li>
-                  <a href="#"><i class="fas fa-user-friends"></i> Artists</a>
-              </li>
-              <li>
-                <a href="#"><i class="fas fa-compact-disc"></i> Albums </a>
-              </li>
-              <li>
-                  <a href="{{ url_for( 'user_profile') }}"><i class="fas fa-list"></i> Playlists</a>
-              </li>
-
-              {% if current_user.is_creator %}
-
-                <div class="border-top  mt-2">
-                  <h5 class="mx-4 mt-4">Artist Section</h5>
-                  <li>
-                      <a href="{{ url_for('creator_profile',_anchor='tabone') }}"><i class="fas fa-compact-disc"></i> My Albums </a>
-                  </li>
-                  <li>
-                      <a href="{{ url_for( 'creator_profile', _anchor='tabtwo') }}"><i class="fas fa-music"></i> My Songs </a>
-                  </li>
-                </div>
-
-              {% endif %}
-
-            </ul>
-          </nav>
-        </div>
-
-        <div class="col-md-2"></div>
-
-        <!-- .......................................................HEADER AND MAIN CONTENT LAYOUT.........................................................  -->
-        
-        <div class="col-md-10 p-0 main-content">
-          <header class="py-3 mb-3 position-fixed">
-            <div class="container-fluid">
-              <div class="d-flex">
-                <div class="flex-grow-1 ">
-                  <form class="w-50 mx-auto" role="search">
-                    <input type="search" class="form-control" placeholder="Search" aria-label="Search">
-                  </form>
-                </div>
-                <div class="flex-shrink-0 dropdown">
-                  <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="mdo" width="40" height="40" class="rounded-circle">
-                  </a>
-                  <ul class="dropdown-menu text-small shadow">
-                    <li><a class="dropdown-item" href="{{ url_for('home_user')  }}">Home</a></li>
-                    <li><a class="dropdown-item" href="{{ url_for('user_profile')  }}">My User Profile</a></li>
-  
-  
-                    {% if not current_user.is_creator %}
-                    <li><a class="dropdown-item" href="{{ url_for('become_artist')  }}">Become Artist</a></li>
-                    {% else %}
-                    <li><a class="dropdown-item" href="{{ url_for('creator_profile')  }}">My Artist Profile</a></li>
-                    {% endif %}
-  
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sign out</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </header>
-
-          {% with messages = get_flashed_messages(with_categories = true) %}
-            {% if messages %}
-              {% for category,message in messages %}
-                <div class="alert alert-{{ category }}">
-                  {{ message }}
-                </div>
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-
-          {% block main %}
-          {% endblock %}
-
-        </div>
-
-      </div>
-    </div>
-
-  {% else %}
-
-    <!-- ...............................................................WELCOME PAGE LAYOUT.........................................................  -->
+    <!-- ........................WELCOME PAGE LAYOUT.............................  -->
 
     <div class="welcome-page">
-        <!-- FLASH MESSAGES -->
-        {% with messages = get_flashed_messages(with_categories = true) %}
+      <!-- FLASH MESSAGES -->
+      {% with messages = get_flashed_messages(with_categories = true) %}
         {% if messages %}
           {% for category,message in messages %}
             <div class="alert alert-{{ category }}">
@@ -141,9 +38,112 @@
           {% endfor %}
         {% endif %}
       {% endwith %}
-      
+    
       {% block content %}
       {% endblock %}
+
+    </div>
+
+  {% else %}
+
+    <div class="container">
+      <div class="row">
+        <!-- COLUMN 1 - MAIN CONTENT  -->
+        <div class="col-10 main">
+
+          <div class="row header shadow">
+              <div class="container-fluid">
+                <div class="d-flex">
+                  <div class="flex-grow-1 ">
+                    <form class="w-50 mx-auto" role="search">
+                      <input type="search" class="form-control" placeholder="Search" aria-label="Search">
+                    </form>
+                  </div>
+                  <div class="flex-shrink-0 dropdown">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      <img src="https://github.com/mdo.png" alt="mdo" width="40" height="40" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small shadow">
+                      <li><a class="dropdown-item" href="{{ url_for('home_user')  }}">Home</a></li>
+                      <li><a class="dropdown-item" href="{{ url_for('user_profile')  }}">My User Profile</a></li>
+        
+        
+                      {% if not current_user.is_creator %}
+                      <li><a class="dropdown-item" href="{{ url_for('become_artist')  }}">Become Artist</a></li>
+                      {% else %}
+                      <li><a class="dropdown-item" href="{{ url_for('creator_profile')  }}">My Artist Profile</a></li>
+                      {% endif %}
+        
+                      <li>
+                        <hr class="dropdown-divider">
+                      </li>
+                      <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sign out</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+
+          <div class="row main-content">
+
+            {% with messages = get_flashed_messages(with_categories = true) %}
+              {% if messages %}
+                {% for category,message in messages %}
+                  <div class="alert alert-{{ category }}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+    
+            {% block main %}
+            {% endblock %}
+
+          </div>
+
+        </div>
+
+        <!-- COLUMN 2 - SIDEBAR  -->
+        <nav id="sidebar" class="col-2">
+          <div class="sidebar-header">
+            <img src="/static/images/app-logo.jpg" class="logo-img" alt="">
+            <h3 class="logo-text d-inline-block mt-3">Rustle</h3>
+          </div>
+          <ul class="list-unstyled components">
+
+            <li>
+              <a href="{{ url_for('home_user') }}"><i class="fas fa-headphones"></i> Discover</a>
+            </li>
+            <li>
+                <a href="#"><i class="fas fa-user-friends"></i> Artists</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-compact-disc"></i> Albums </a>
+            </li>
+            <li>
+                <a href="{{ url_for( 'user_profile') }}"><i class="fas fa-list"></i> Playlists</a>
+            </li>
+
+            {% if current_user.is_creator %}
+
+              <div class="border-top  mt-2">
+                <h5 class="mx-4 mt-4">Artist Section</h5>
+                <li>
+                    <a href="{{ url_for('creator_profile',_anchor='tabone') }}"><i class="fas fa-compact-disc"></i> My Albums </a>
+                </li>
+                <li>
+                    <a href="{{ url_for( 'creator_profile', _anchor='tabtwo') }}"><i class="fas fa-music"></i> My Songs </a>
+                </li>
+              </div>
+
+            {% endif %}
+
+          </ul>
+        </nav>
+        
+      </div>
     </div>
 
   {% endif %}
