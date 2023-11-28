@@ -10,7 +10,6 @@
       </div>
     </div>
 
-
     <div class="tabs">
 
         <!-- .......................................................... PLAYLIST TAB ............................................................... -->
@@ -76,16 +75,26 @@
 
         <!-- PLAYLIST CARDS  -->
         <div class="card-container">
-          {% for playlist in playlists %}
-            <a href="{{ url_for('get_playlist', playlist_id=playlist.id ) }}" class="card">
-              <img src="/static/images/default_playlist.png" alt="Song 1">
-              <div class="overlay">
-                <div class="overlay-content">
-                  <h3 class="song-title">{{ playlist.playlist_title}}</h3>
+
+          {% if size == 0 %}
+
+            <h6>You have not created any playlists yet. To create a new playlist click on + button.</h6>
+
+          {% else %}
+
+            {% for playlist in playlists %}
+              <a href="{{ url_for('get_playlist', playlist_id=playlist.id ) }}" class="card">
+                <img src="/static/images/default_playlist.png" alt="Song 1">
+                <div class="overlay">
+                  <div class="overlay-content">
+                    <h3 class="song-title">{{ playlist.playlist_title}}</h3>
+                  </div>
                 </div>
-              </div>
-            </a>
-          {% endfor %}
+              </a>
+            {% endfor %}
+
+          {% endif %}
+
         </div>
       </div>
     </div>

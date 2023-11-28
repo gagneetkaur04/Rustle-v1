@@ -15,7 +15,6 @@
   <!-- STYLESHEET FOR ICONS  -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-
   <!-- Title of the page  -->
   <title>Rustle</title>
 
@@ -49,9 +48,9 @@
     <div class="container">
       <div class="row">
         <!-- COLUMN 1 - MAIN CONTENT  -->
-        <div class="col-10 main">
+        <div class="main">
 
-          <div class="row header shadow">
+          <div class="header shadow">
               <div class="container-fluid">
                 <div class="d-flex">
                   <div class="flex-grow-1 ">
@@ -86,8 +85,7 @@
 
           </div>
 
-          <div class="row main-content">
-
+          <div class="main-content">
             <div class="flash-m">
               {% with messages = get_flashed_messages(with_categories = true) %}
                 {% if messages %}
@@ -114,15 +112,9 @@
             <h3 class="logo-text d-inline-block mt-3">Rustle</h3>
           </div>
           <ul class="list-unstyled components">
-
+            <h5 class="mt-4">User Section</h5>
             <li>
-              <a href="{{ url_for('home_user') }}"><i class="fas fa-headphones"></i> Discover</a>
-            </li>
-            <li>
-                <a href="#"><i class="fas fa-user-friends"></i> Artists</a>
-            </li>
-            <li>
-              <a href="#"><i class="fas fa-compact-disc"></i> Albums </a>
+              <a href="{{ url_for('home_user') }}"><i class="fas fa-headphones"></i> All Songs</a>
             </li>
             <li>
                 <a href="{{ url_for( 'user_profile') }}"><i class="fas fa-list"></i> Playlists</a>
@@ -130,8 +122,8 @@
 
             {% if current_user.is_creator %}
 
-              <div class="border-top  mt-2">
-                <h5 class="mx-4 mt-4">Artist Section</h5>
+              <div class="mt-2">
+                <h5 class="mt-4">Artist Section</h5>
                 <li>
                     <a href="{{ url_for('creator_profile',_anchor='tabone') }}"><i class="fas fa-compact-disc"></i> My Albums </a>
                 </li>
@@ -160,6 +152,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
     integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
     crossorigin="anonymous"></script>
+
 </body>
 
 </html>

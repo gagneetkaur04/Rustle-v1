@@ -3,6 +3,9 @@ body {
   overflow: hidden;
 }
 
+a{
+  text-decoration: none;
+}
 /* .................. FLASH MESSAGES ...................  */
 
 .flash-m{
@@ -165,6 +168,7 @@ span a:hover{
 }
 
 .header{
+  z-index: 10;
   padding-top: 15px;
   min-height: 70px;
   background-color: rgb(13, 59, 64);
@@ -191,14 +195,14 @@ input[type="search"]::placeholder {
 
 .main-content {
   padding-top: 70px;
-  background: #215252;
-  right: 0;
-  margin-left: 270px;
-  width: 102%;
+  background: linear-gradient(to bottom, #446868, #0743386e);
+  margin-left: 15%;
+  width: 90%;
   min-height: 100vh;
 }
 
 #sidebar {
+  z-index: 11;
   position: fixed;
   min-height: 100vh;
   background: linear-gradient(to bottom,  #0D3B40, #0D0D0D); 
@@ -206,16 +210,17 @@ input[type="search"]::placeholder {
 }
 
 #sidebar .sidebar-header {
-  padding: 20px 40px;
+  margin-top: 30px;
+  padding: 20px 30px;
   color: white;
 }
 
 #sidebar ul.components {
-  padding: 0px;
+  padding: 0px 40px;
 }
 
 #sidebar ul.components li a {
-  padding: 10px 40px;
+  padding: 10px;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -248,19 +253,83 @@ input[type="search"]::placeholder {
   margin: 100px;
 }
 
+.one-song{
+  border: #0d0d0d 1px solid;
+  box-shadow: 2px 2px;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  color: #0d0d0d;
+}
 
 .song-list {
   list-style: none;
   padding: 0;
+  display: inline-flex;
+  flex-direction: column;
 }
 
-.song-item {
-  padding: 15px 0;
-  border-bottom: 1px solid #ccc;
+.playsong{
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 10px;
+  background-color: #042f34;
 }
 
-.song-item:last-child {
-  border-bottom: none;
+.song-contents{
+  width: 390px;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: baseline;
+  
+}
+
+.song-title, .song-artist{
+  width: max-content;
+}
+
+.music-page{
+  margin: 50px;
+  display: flex;
+  flex-direction: row;
+  height: 70vh;  
+}
+
+.music-page .song-details{
+  width: max-content;
+}
+
+.lyrics{
+  padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+}
+.music-page .song-lyrics{
+  width: max-content;
+  overflow-y: auto;
+  font-size: larger;
+  background: linear-gradient(180deg, rgba(255, 255, 0, 0) 0%, rgba(0, 188, 212, 0) 80%, rgba(0, 0, 0, 0.9) 100%);
+
+}
+.song-lyrics pre{
+  padding-bottom: 30px;
+}
+.song-lyrics::-webkit-scrollbar {
+  width: 5px;
+}
+.song-lyrics::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+
+.music-page button{
+  height: max-content;
+  width: max-content;
+  border: none;
+
 }
 
 .image-container {
@@ -336,27 +405,30 @@ input[type="search"]::placeholder {
 
 .card-container {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  align-self: center;
+  margin: 30px;
 }
 
 .card {
-  width: 30%;
-  height: 330px; /* adjust this in the creator profile html page */
+  width: max-content;
+  height: 300px; /* adjust this in the creator profile html page */
   border-radius: 8px;
   overflow: hidden;
-  position: relative;
-  margin-bottom: 20px;
+  margin: 15px;
   background-color: #ffffff44;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 4px 4px 4px #00000044;
 }
 
 .card img {
-  width: 330px; /* adjust this in the creator profile html page */
-  height: 250px;  /* adjust this in the creator profile html page */
+  width: fit-content; /* adjust this in the creator profile html page */
+  height: -webkit-fill-available;  /* adjust this in the creator profile html page */
   object-fit: scale-down;
   transition: transform 0.5s ease;
   align-items: center;
+
 }
 
 .card:hover img {
@@ -369,7 +441,7 @@ input[type="search"]::placeholder {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 80%;  /* adjust this in the creator profile html page */
+  height: 100%;  /* adjust this in the creator profile html page */
   width: 100%;
   opacity: 0;
   transition: 0.5s ease;
@@ -405,12 +477,28 @@ input[type="search"]::placeholder {
   border-radius: 100px;
 }
 
+.edit-button, .delete-button{
+  background-color: #19575e;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.delete-button{
+  background-color: #521212;
+}
+
 /* -------------- TABS ----------------- */
 
  .tabs {
 	display: flex;
 	flex-wrap: wrap; 
-
+  margin: 20px;
 
 }
 .tabs label {
@@ -477,4 +565,13 @@ body::-webkit-scrollbar-thumb {
 }
 body::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+
+/* MODALS */
+
+.modal-content{
+  width: max-content;
+  margin: auto;
+  padding: 20px;
 }
