@@ -3,9 +3,9 @@
 
 {% block main %}
 
-    <div class="px-5 lt-songs-container ">
-        <h1 class="text-light mb-4">Latest Songs</h1>
-        <ul class="song-list">
+    <div class="lt-songs-container ">
+        <h1 class="text-light lt-songs-head">Latest Songs</h1>
+        <ul class="song-list lt-songs">
             {% for song in latest_songs %}
                 <div class="one-song">
                     <li class="song-contents">
@@ -20,7 +20,7 @@
                     </li>
                     <p class="song-artist">Artist : {{ song.creator_id }}</p> 
                     <p class="song-artist">Album : {{ song.album_id }}</p>
-                    <p>(Released on {{ song.date_created.strftime('%Y-%m-%d') }})</p>
+                    <p>(Released on {{ song.date_created.strftime('%d-%m-%Y') }})</p>
 
                 </div>
             {% endfor %}
