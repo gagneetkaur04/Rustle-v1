@@ -2,22 +2,184 @@
 
 {% block main %}
 
-<div class="px-5 lt-songs-container ">
-    <h1 class="h3 text-light">{{ song.song_title }}</h1>
-    <pre>{{ song.lyrics }}</pre>
-    <p>By {{ creator }}</p>
-</div>
+    <div class="music-page">
+        <div class="song-details">
+        <music-card
+            artist="{{ song.creator_id }}"
+            title="{{ song.song_title }}"
+            image="{{ url_for('static', filename='images/' + 'default_song.jpg') }}"
+            audio="{{ url_for('static', filename='audios/' + song.song_path) }}">
+            <music-card>
+        </div>
 
-<a href="{{ url_for('edit_song', song_id=song.id)}}" >
-    <button type="button" class="btn btn-success">
-        Edit Song
-    </button>
-</a>
+        <div class="lyrics">
+            <h4 class="heading">Lyrics</h4>
+            <div class="song-lyrics">
+                <pre>{{ song.lyrics }}</pre>
+            </div>
+        </div>
 
-<a href="{{ url_for('delete_song', song_id=song.id)}}" >
-    <button type="button" class="btn btn-danger" >
-        Delete Song
-    </button>
-</a>
+        <div class="buttons mx-5">
+            <h4  class="mb-4">
+                Creator Controls
+            </h4>
+
+            <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editSongModal">
+                Edit Song
+            </button>
+
+            <br>
+            <br>
+        
+            <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteSongModal">
+                Delete Song
+            </button>
+
+        </div>
+    </div>
+
+    <!-- ----------------------------------------------------MODALS-------------------------------------------------------------  -->
+
+    <!-- EDIT SONG MODAL  -->
+    <div class="modal fade" id="editSongModal" tabindex="-1" aria-labelledby="editSongModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Edit Song/h3>
+                        </div>
+                    </div>
+
+                    <!-- FORM TO EDIT SONG  -->
+                    <form action="" method="POST">
+
+                        {{ form.hidden_tag() }}
+
+                        <!-- TITLE  -->
+                        <div class="form-group">
+                            {{ form.song_title.label(class='form-control-label') }}
+                
+                            {% if form.song_title.errors %}
+                            {{ form.song_title(class='form-control form-control-lg is-invalid') }}
+                
+                            <div class="invalid-feedback">
+                                {% for error in form.song_title.errors %}
+                                <span> {{ error }} </span>
+                                {% endfor %}
+                            </div>
+                
+                            {% else %}
+                            {{ form.song_title(class='form-control form-control-lg') }}
+                
+                            {% endif %}
+                        </div>
+                        <br>
+                
+                        <!-- LYRICS  -->
+                        <div class="form-group">
+                            {{ form.lyrics.label(class='form-control-label') }}
+                
+                            {% if form.lyrics.errors %}
+                            {{ form.lyrics(class='form-control form-control-lg is-invalid') }}
+                
+                            <div class="invalid-feedback">
+                                {% for error in form.lyrics.errors %}
+                                <span> {{ error }} </span>
+                                {% endfor %}
+                            </div>
+                
+                            {% else %}
+                            {{ form.lyrics(class='form-control form-control-lg') }}
+                
+                            {% endif %}
+                        </div>
+                        <br>
+                
+                        <!-- DURATION  -->
+                        <div class="form-group">
+                            {{ form.duration.label(class='form-control-label') }}
+                
+                            {% if form.duration.errors %}
+                            {{ form.duration(class='form-control form-control-lg is-invalid') }}
+                
+                            <div class="invalid-feedback">
+                                {% for error in form.duration.errors %}
+                                <span> {{ error }} </span>
+                                {% endfor %}
+                            </div>
+                
+                            {% else %}
+                            {{ form.duration(class='form-control form-control-lg') }}
+                
+                            {% endif %}
+                        </div>
+                        <br>
+                        
+                        <!-- ALBUM SELECTION  -->
+                        <div class="form-group">
+                            {{ form.album.label(class='form-control-label') }}
+                
+                            {% if form.album.errors %}
+                                {{ form.album(class='form-control form-control-lg is-invalid') }}
+                
+                                <div class="invalid-feedback">
+                                    {% for error in form.album.errors %}
+                                        <span> {{ error }} </span>
+                                    {% endfor %}
+                                </div>
+                            
+                            {% else %}
+                                <select id="album" name="album" class="form-control">
+                                    {% for id, name in form.album.choices %}
+                                        {% if id == -1 %}
+                                            <option value="{{ id }}" selected>{{ name }}</option>
+                                        {% else %}
+                                            <option value="{{ id }}">{{ name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                
+                            {% endif %}                                   
+                        </div>
+                        <br>
+                
+                        <!-- SUBMIT BUTTON  -->
+                        <div class="form-group">
+                            {{ form.submit(class='btn btn-success') }}
+                        </div>
+                
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE SONG MODAL  -->
+    <div class="modal fade" id="deleteSongModal" tabindex="-1" aria-labelledby="deleteSongModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Delete Song?</h3>
+                            <br>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('delete_song', song_id=song.id)}}">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                    
+                    <a href="{{ url_for('get_song', song_id=song.id)}}">
+                        <button class="btn btn-secondary ms-2">Cancel</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MUSIC CARD JS  -->
+    <script type="module" src="/static/js/index.js"></script>
 
 {% endblock %}

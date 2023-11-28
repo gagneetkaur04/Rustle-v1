@@ -5,15 +5,13 @@
 <div class="px-5 lt-songs-container ">
     <h1 class="h3 text-light">{{ album.album_name }}</h1>
 
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
+    <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
         Edit Album
     </button>
 
-    <a href="{{ url_for('delete_album', album_id=album.id)}}" >
-        <button type="button" class="btn btn-danger" >
-            Delete Album
-        </button>
-    </a>
+    <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
+        Delete Album
+    </button>
 
     <ul class="song-list">
         {% for song in songs %}
@@ -26,73 +24,96 @@
 
 
 
-<!-- ----------------------------------------------------MODALS-------------------------------------------------------------  -->
+    <!-- ----------------------------------------------------MODALS-------------------------------------------------------------  -->
 
-<!-- EDIT PLAYLIST MODAL  -->
-<div class="modal fade" id="editAlbumModal" tabindex="-1" aria-labelledby="editAlbumModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="playlist-section">
-                    <div class="playlist-details">
-                        <h3 class="playlist-title">Edit Album</h3>
-                    </div>
-                </div>
-
-                <!-- FORM TO EDIT ALBUM  -->
-                <form action="" method="POST">
-                    {{ editAlbumForm.hidden_tag() }}
-
-                    <!-- TITLE  -->
-                    <div class="form-group">
-                        {{ editAlbumForm.album_title.label(class='form-control-label') }}
-            
-                        {% if editAlbumForm.album_title.errors %}
-                        {{ editAlbumForm.album_title(class='form-control form-control-lg is-invalid') }}
-            
-                        <div class="invalid-feedback">
-                            {% for error in editAlbumForm.album_title.errors %}
-                            <span> {{ error }} </span>
-                            {% endfor %}
+    <!-- EDIT ALBUM MODAL  -->
+    <div class="modal fade" id="editAlbumModal" tabindex="-1" aria-labelledby="editAlbumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Edit Album</h3>
                         </div>
-            
-                        {% else %}
-                        {{ editAlbumForm.album_title(class='form-control form-control-lg') }}
-            
-                        {% endif %}
                     </div>
-                    <br>
-            
-                    <!-- GENRE  -->
-                    <div class="form-group">
-                        {{ editAlbumForm.genre.label(class='form-control-label') }}
-            
-                        {% if editAlbumForm.genre.errors %}
-                        {{ editAlbumForm.genre(class='form-control form-control-lg is-invalid') }}
-            
-                        <div class="invalid-feedback">
-                            {% for error in editAlbumForm.genre.errors %}
-                            <span> {{ error }} </span>
-                            {% endfor %}
-                        </div>
-            
-                        {% else %}
-                        {{ editAlbumForm.genre(class='form-control form-control-lg') }}
-            
-                        {% endif %}
-                    </div>
-                    <br>
-            
-                    <!-- SUBMIT BUTTON  -->
-                    <div class="form-group">
-                        {{ editAlbumForm.submit(class='btn btn-success') }}
-                    </div>
-            
-                </form>
+
+                    <!-- FORM TO EDIT ALBUM  -->
+                    <form action="" method="POST">
+                        {{ editAlbumForm.hidden_tag() }}
+
+                        <!-- TITLE  -->
+                        <div class="form-group">
+                            {{ editAlbumForm.album_title.label(class='form-control-label') }}
                 
+                            {% if editAlbumForm.album_title.errors %}
+                            {{ editAlbumForm.album_title(class='form-control form-control-lg is-invalid') }}
+                
+                            <div class="invalid-feedback">
+                                {% for error in editAlbumForm.album_title.errors %}
+                                <span> {{ error }} </span>
+                                {% endfor %}
+                            </div>
+                
+                            {% else %}
+                            {{ editAlbumForm.album_title(class='form-control form-control-lg') }}
+                
+                            {% endif %}
+                        </div>
+                        <br>
+                
+                        <!-- GENRE  -->
+                        <div class="form-group">
+                            {{ editAlbumForm.genre.label(class='form-control-label') }}
+                
+                            {% if editAlbumForm.genre.errors %}
+                            {{ editAlbumForm.genre(class='form-control form-control-lg is-invalid') }}
+                
+                            <div class="invalid-feedback">
+                                {% for error in editAlbumForm.genre.errors %}
+                                <span> {{ error }} </span>
+                                {% endfor %}
+                            </div>
+                
+                            {% else %}
+                            {{ editAlbumForm.genre(class='form-control form-control-lg') }}
+                
+                            {% endif %}
+                        </div>
+                        <br>
+                
+                        <!-- SUBMIT BUTTON  -->
+                        <div class="form-group">
+                            {{ editAlbumForm.submit(class='btn btn-success') }}
+                        </div>
+                
+                    </form>
+                    
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- DELETE ALBUM MODAL  -->
+    <div class="modal fade" id="deleteAlbumModal" tabindex="-1" aria-labelledby="deleteAlbumModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Delete Album?</h3>
+                            <br>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('delete_album', album_id=album.id)}}">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                    
+                    <a href="{{ url_for('get_album', album_id=album.id)}}">
+                        <button class="btn btn-secondary ms-2">Cancel</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
