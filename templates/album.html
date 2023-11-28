@@ -3,7 +3,7 @@
 {% block main %}
 
 <div class="px-5 lt-songs-container ">
-    <h1 class="h3 text-light">{{ album.album_name }}</h1>
+    <h1 class="text-light">{{ album.album_name }}</h1>
 
     <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
         Edit Album
@@ -12,14 +12,29 @@
     <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
         Delete Album
     </button>
+</div>
 
+<div class="album-songs">
     <ul class="song-list">
         {% for song in songs %}
-            <li class="song-item">{{ song.song_title }} (Released on {{ song.date_created.strftime('%Y-%m-%d') }})</li>
+            <div class="one-song">
+                <li class="song-contents">
+                    <h3 class="song-title">{{ song.song_title }}</h3>
+    
+                    <a href="{{ url_for('get_song', song_id=song.id )}}">
+                        <button class="playsong">
+                            <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
+                        </button>
+                    </a>
+                    
+                </li>
+                <p class="song-artist">Artist : {{ song.creator_id }}</p>
+                <p>(Released on {{ song.date_created.strftime('%Y-%m-%d') }})</p>
+            </div>
         {% endfor %}
     </ul>
-
 </div>
+
 
 
 
@@ -29,11 +44,12 @@
     <!-- EDIT ALBUM MODAL  -->
     <div class="modal fade" id="editAlbumModal" tabindex="-1" aria-labelledby="editAlbumModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content album-modal">
                 <div class="modal-body">
                     <div class="playlist-section">
                         <div class="playlist-details">
                             <h3 class="playlist-title">Edit Album</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     </div>
 
@@ -108,9 +124,8 @@
                         <button class="btn btn-danger">Delete</button>
                     </a>
                     
-                    <a href="{{ url_for('get_album', album_id=album.id)}}">
-                        <button class="btn btn-secondary ms-2">Cancel</button>
-                    </a>
+                    <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
                 </div>
             </div>
         </div>

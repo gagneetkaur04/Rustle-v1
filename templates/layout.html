@@ -27,6 +27,7 @@
     <!-- ........................WELCOME PAGE LAYOUT.............................  -->
 
     <div class="welcome-page">
+      
       <!-- FLASH MESSAGES -->
       {% with messages = get_flashed_messages(with_categories = true) %}
         {% if messages %}
@@ -61,7 +62,7 @@
                   <div class="flex-shrink-0 dropdown">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                       data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="https://github.com/mdo.png" alt="mdo" width="40" height="40" class="rounded-circle">
+                      <img src="/static/images/default_user.png" alt="mdo" width="40" height="40" class="rounded-circle">
                     </a>
                     <ul class="dropdown-menu text-small shadow">
                       <li><a class="dropdown-item" href="{{ url_for('home_user')  }}">Home</a></li>
@@ -86,6 +87,8 @@
           </div>
 
           <div class="main-content">
+
+            <!-- FLASH MESSAGES -->
             <div class="flash-m">
               {% with messages = get_flashed_messages(with_categories = true) %}
                 {% if messages %}
@@ -97,7 +100,7 @@
                 {% endif %}
               {% endwith %}
             </div>
-    
+
             {% block main %}
             {% endblock %}
 

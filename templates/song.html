@@ -18,7 +18,7 @@
                 <pre>{{ song.lyrics }}</pre>
             </div>
         </div>
-
+        
         <div class="buttons mx-5">
             <h4  class="mb-4">
                 Creator Controls
@@ -43,13 +43,16 @@
     <!-- EDIT SONG MODAL  -->
     <div class="modal fade" id="editSongModal" tabindex="-1" aria-labelledby="editSongModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content song-modal">
+                
                 <div class="modal-body">
                     <div class="playlist-section">
                         <div class="playlist-details">
-                            <h3 class="playlist-title">Edit Song/h3>
+                            <h3 class="playlist-title">Edit Song</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                     </div>
+
 
                     <!-- FORM TO EDIT SONG  -->
                     <form action="" method="POST">
@@ -150,6 +153,7 @@
                         </div>
                 
                     </form>
+
                     
                 </div>
             </div>
@@ -171,9 +175,8 @@
                         <button class="btn btn-danger">Delete</button>
                     </a>
                     
-                    <a href="{{ url_for('get_song', song_id=song.id)}}">
-                        <button class="btn btn-secondary ms-2">Cancel</button>
-                    </a>
+                    <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
                 </div>
             </div>
         </div>

@@ -18,7 +18,10 @@
                         </a>
                         
                     </li>
-                    <p class="song-artist">Artist : {{ song.creator_id }}</p>
+                    <p class="song-artist">Artist : {{ song.creator_id }}</p> 
+                    <p class="song-artist">Album : {{ song.album_id }}</p>
+                    <p>(Released on {{ song.date_created.strftime('%Y-%m-%d') }})</p>
+
                 </div>
             {% endfor %}
         </ul>

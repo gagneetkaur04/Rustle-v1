@@ -10,98 +10,132 @@
         Edit Playlist
     </button>
 
-    <a href="{{ url_for('delete_playlist', playlist_id=playlist.id)}}" >
-        <button type="button" class="btn btn-danger" >
-            Delete Playlist
-        </button>
-    </a>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePlaylistModal">
+        Delete Playlist
+    </button>    
+</div>
 
+<div class="album-songs">
     <ul class="song-list">
         {% for song in songs %}
-            <li class="song-item">{{ song.song_title }} (Released on {{ song.date_created.strftime('%Y-%m-%d') }})
-            </li>
-        {% endfor %}
-    </ul>
+            <div class="one-song">
+                <li class="song-contents">
+                    <h3 class="song-title">{{ song.song_title }}</h3>
     
-</div>
-
-
-
-<!-- ...........................................................MODALS...........................................................  -->
-
-
-<!-- ADD SONG TO PLAYLIST MODAL  -->
-<div class="modal fade" id="songModal" tabindex="-1" aria-labelledby="songModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="playlist-section">
-                    <div class="playlist-details">
-                        <h3 class="playlist-title">Add Song to Playlist</h3>
-                    </div>
-                </div>
-                <form action="" method="POST">
-                    {{ addsong_form.hidden_tag() }}
-                    <select id="song" name="song" class="form-control">
-                        {% for id, name in all_songs %}
-                                <option value="{{ id }}">{{ name }}</option>
-                        {% endfor %}
-                    </select>
-                    <br>
-                    <!-- SUBMIT BUTTON  -->
-                    <div class="form-group">
-                        {{ addsong_form.submit(class='btn btn-success') }}
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- EDIT PLAYLIST MODAL  -->
-<div class="modal fade" id="editPlaylistModal" tabindex="-1" aria-labelledby="editPlaylistModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="playlist-section">
-                    <div class="playlist-details">
-                        <h3 class="playlist-title">Edit Playlist</h3>
-                    </div>
-                </div>
-
-                <form action="" method="POST">
-                    {{ edit_playlist_form.hidden_tag() }}
-                    <!-- TITLE  -->
-                    <div class="form-group">
-                        {{ edit_playlist_form.playlist_title.label(class='form-control-label') }}
-            
-                        {% if edit_playlist_form.playlist_title.errors %}
-                        {{ edit_playlist_form.playlist_title(class='form-control form-control-lg is-invalid') }}
-            
-                        <div class="invalid-feedback">
-                            {% for error in edit_playlist_form.playlist_title.errors %}
-                            <span> {{ error }} </span>
-                            {% endfor %}
-                        </div>
-            
-                        {% else %}
-                        {{ edit_playlist_form.playlist_title(class='form-control form-control-lg') }}
-            
-                        {% endif %}
-                    </div>
-                    <br>
-            
-                    <!-- SUBMIT BUTTON  -->
-                    <div class="form-group">
-                        {{ edit_playlist_form.submit(class='btn btn-success') }}
-                    </div>
-            
-                </form>
+                    <a href="{{ url_for('play_song', song_id=song.id )}}">
+                        <button class="playsong">
+                            <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
+                        </button>
+                    </a>
+                    
+                </li>
+                <p class="song-artist">Artist : {{ song.creator_id }}</p>
+                <p class="song-artist">Album : {{ song.album_id}}</p>
+                <p>(Released on {{ song.date_created.strftime('%Y-%m-%d') }})</p>
                 
             </div>
-        </div>
-    </div>
+        {% endfor %}
+    </ul>
 </div>
 
+
+    <!-- ..............................MODALS.........................................  -->
+
+
+    <!-- ADD SONG TO PLAYLIST MODAL  -->
+    <!-- <div class="modal fade" id="songModal" tabindex="-1" aria-labelledby="songModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Add Song to Playlist</h3>
+                        </div>
+                    </div>
+                    <form action="" method="POST">
+                        {{ addsong_form.hidden_tag() }}
+                        <select id="song" name="song" class="form-control">
+                            {% for id, name in all_songs %}
+                                    <option value="{{ id }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+
+                        <div class="form-group">
+                            {{ addsong_form.submit(class='btn btn-success') }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- EDIT PLAYLIST MODAL  -->
+    <div class="modal fade" id="editPlaylistModal" tabindex="-1" aria-labelledby="editPlaylistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Edit Playlist</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+
+                    <form action="" method="POST">
+                        {{ edit_playlist_form.hidden_tag() }}
+                        <!-- TITLE  -->
+                        <div class="form-group">
+                            {{ edit_playlist_form.playlist_title.label(class='form-control-label') }}
+                
+                            {% if edit_playlist_form.playlist_title.errors %}
+                            {{ edit_playlist_form.playlist_title(class='form-control form-control-lg is-invalid') }}
+                
+                            <div class="invalid-feedback">
+                                {% for error in edit_playlist_form.playlist_title.errors %}
+                                <span> {{ error }} </span>
+                                {% endfor %}
+                            </div>
+                
+                            {% else %}
+                            {{ edit_playlist_form.playlist_title(class='form-control form-control-lg') }}
+                
+                            {% endif %}
+                        </div>
+                        <br>
+                
+                        <!-- SUBMIT BUTTON  -->
+                        <div class="form-group">
+                            {{ edit_playlist_form.submit(class='btn btn-success') }}
+                        </div>
+                
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE PLAYLIST MODAL  -->
+    <div class="modal fade" id="deletePlaylistModal" tabindex="-1" aria-labelledby="deletePlaylistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Delete Playlist?</h3>
+                            <br>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('delete_playlist', playlist_id=playlist.id)}}">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                    
+                    <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

@@ -262,6 +262,10 @@ input[type="search"]::placeholder {
   color: #0d0d0d;
 }
 
+.one-song p{
+  margin: 0;
+}
+
 .song-list {
   list-style: none;
   padding: 0;
@@ -374,12 +378,13 @@ input[type="search"]::placeholder {
   justify-content: space-between;
   align-items: center;
   padding-bottom: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .playlist-details {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .playlist-title {
@@ -493,6 +498,14 @@ input[type="search"]::placeholder {
   background-color: #521212;
 }
 
+.album-songs{
+  display: flex;
+  flex-direction: column;
+  margin-left: 90px;
+  max-width: fit-content;
+
+}
+
 /* -------------- TABS ----------------- */
 
  .tabs {
@@ -574,4 +587,49 @@ body::-webkit-scrollbar-thumb:hover {
   width: max-content;
   margin: auto;
   padding: 20px;
+}
+
+.btn-close{
+  padding: 8px 10px;
+  margin-left: 20px;
+  border: #0D0D0D 2px solid;
+}
+
+.song-modal{
+  width: 500px;
+}
+
+.album-modal{
+  width: 400px;
+}
+
+.form-group input[type="text"]{
+  font-size: 14px;
+}
+
+.form-group textarea{
+  font-size: 14px;
+  height: 150px;
+}
+
+
+/* FORMS */
+
+.tabs .form-control-label {
+  padding: 0rem 0rem;
+  padding-top: 10px;
+  padding-bottom: 4px;
+}
+
+.form-control-label {
+  padding: 0rem 0rem;
+  padding-top: 10px;
+  padding-bottom: 4px;
+  order: 1; 
+	display: block;
+	cursor: pointer;
+  /* background: #fff; */
+  font-weight: bold;
+  transition: background ease 0.2s;
+	border-radius: 8px 8px 0 0;
 }
