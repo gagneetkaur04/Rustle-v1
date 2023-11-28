@@ -26,7 +26,7 @@
                     <h3 class="playlist-title">My Albums</h3>
                 </div>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createAlbum">
-                    +
+                    Add Album
                 </button>
             </div>
 
@@ -97,16 +97,31 @@
 
             <!-- ALBUM CARDS  -->
             <div class="card-container">
-                {% for album in albums %}
-                <a href="{{ url_for('get_album', album_id=album.id) }}" class="card">
-                    <img src="/static/images/default_album.jpg" alt="Album {{ album.album_id}} ">
-                    <div class="overlay">
-                        <div class="overlay-content">
-                            <h3 class="song-title">{{ album.album_name }}</h3>
-                        </div>
+
+                {% if album_size == 0 %}
+
+                <h6>You have not created any albums yet. To create an Album click on 'Add Album' button.</h6>
+
+                {% else %}
+
+                    {% for album in albums %}
+
+                    <div>
+                        <a href="{{ url_for('get_album', album_id=album.id) }}" class="card">
+                            <img src="/static/images/default_album.jpg" alt="Album {{ album.album_id}} ">
+                            <div class="overlay">
+                                <div class="overlay-content">
+                                    <h3 class="song-title">{{ album.album_name }}</h3>
+                                    <h6 class="mx-auto">{{ album.genre }}</h6>
+                                </div>
+                            </div>
+                        </a>
+    
+                        <h4 class="song-title mx-auto ">{{ album.album_name }}</h4>
                     </div>
-                </a>
-                {% endfor %}
+                    {% endfor %}
+
+                {% endif %}
             </div>
         </div>
 
@@ -124,7 +139,7 @@
                     <h3 class="playlist-title">My Songs</h3>
                 </div>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createSong">
-                    +
+                    Add Song
                 </button>
             </div>
 
@@ -246,19 +261,29 @@
 
             <!-- SONG CARDS  -->
             <div class="card-container">
-                {% for song in songs %}
-                <a href="{{ url_for('get_song', song_id=song.id) }}" class="card">
-                    <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
-                    <div class="overlay">
-                        <div class="overlay-content">
-                            <h3 class="song-title">{{ song.song_title }}</h3>
-                            <audio controls>
-                                <source src="{{ song.song_path }}" type="audio/mp3">
-                            </audio>
-                        </div>
+
+                {% if songs_size == 0 %}
+
+                <h6>You have not created any songs yet. To create a Song click on 'Add Song' button.</h6>
+
+                {% else %}
+
+                    {% for song in songs %}
+                    <div>
+                        <a href="{{ url_for('get_song', song_id=song.id) }}" class="card">
+                            <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
+                            <div class="overlay">
+                                <div class="overlay-content">
+                                    <h3 class="song-title">{{ song.song_title }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                        <h4 class="song-title mx-auto">{{ song.song_title }}</h4>
                     </div>
-                </a>
-                {% endfor %}
+                    {% endfor %}
+
+                {% endif %}
+
             </div>
         </div>
     </div>
