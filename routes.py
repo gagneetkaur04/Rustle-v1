@@ -31,7 +31,7 @@ def save_audio(form_audio):
 
     form_audio.save(audio_path)
 
-    return audio_path
+    return audio_fn
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ROUTES <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -74,7 +74,7 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home_user'))  ## CHANGE NEEDED IN REDIRECTION
+        return redirect(url_for('home_user'))
     
     form = LoginForm()
 
@@ -107,9 +107,8 @@ def logout():
 def home_user():
 
     user = current_user
-
-    latest_songs = Song.query.order_by(Song.date_created.desc()).limit(10).all()
-
+    latest_songs = Song.query.order_by(Song.date_created.desc()).all()
+    
     return render_template('home_user.html', user=user, latest_songs=latest_songs)
     
 
@@ -137,10 +136,12 @@ def user_profile():
     user = current_user
     form = PlaylistForm()
 
+
     if request.method == 'GET':
         playlists = Playlist.query.filter_by(user_id=user.id).all()
+        size = len(playlists)
 
-        return render_template('user_profile.html', user=user, playlists=playlists, form=form)
+        return render_template('user_profile.html', user=user, playlists=playlists, form=form, size=size)
     
     elif request.method == 'POST':
 
@@ -159,7 +160,7 @@ def user_profile():
         return render_template('user_profile.html', form=form)
     
 
-# Get Playlist ---> To view the songs in the playlist; Add Song to Playlist; Edit Playlist
+#............................... Get Playlist ---> Create,Update and Read Playlist...............................
 @app.route('/user/playlist/<int:playlist_id>', methods=['GET', 'POST'])
 @login_required
 def get_playlist(playlist_id):
@@ -206,8 +207,7 @@ def get_playlist(playlist_id):
                                             all_songs=addsong_form.selected_song.choices)
 
 
-
-# Delete Playlist --> To delete the playlist
+#................. Delete Playlist --> To delete the playlist......................
 @app.route('/user/playlist/<int:playlist_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_playlist(playlist_id):
@@ -218,9 +218,17 @@ def delete_playlist(playlist_id):
     
         flash('Your playlist has been deleted!', 'success')
         return redirect(url_for('user_profile'))
+
+
+#.................................... PLAY A SONG...................................
+@app.route('/play_song/<int:song_id>', methods=['GET', 'POST'])
+@login_required
+def play_song(song_id):
+
+    form=AddToPlaylistForm()
+    song = Song.query.get_or_404(song_id)
+    return render_template('play_song.html', song=song, form=form)
     
-
-
 # ####################################################### CREATOR ROUTES #########################################################
 
 # Creator Profile ; Add Album ;  Add Song
@@ -240,7 +248,13 @@ def creator_profile():
         albums = Album.query.filter_by(creator_id=user.id).all()
         songs = Song.query.filter_by(creator_id=user.id).all()
 
-        return render_template('creator_profile.html', user=user, albums=albums, songs=songs, album_form=album_form, song_form=song_form)
+        album_size = len(albums)
+        songs_size = len(songs)
+
+        return render_template('creator_profile.html', user=user, albums=albums, 
+                                    songs=songs, album_form=album_form, 
+                                    song_form=song_form, album_size=album_size, 
+                                    songs_size=songs_size)
 
     elif request.method == 'POST':
 
@@ -288,7 +302,7 @@ def creator_profile():
 
 # ................................... CREATOR ALBUM ROUTES ......................................
 
-# Get album ---> To view the songs in the album
+# Get album ---> To view the songs in the album ; Edit Album
 @app.route('/album/<int:album_id>', methods=['GET', 'POST'])
 @login_required
 def get_album(album_id):
@@ -328,20 +342,11 @@ def delete_album(album_id):
 
 # ................................... CREATOR SONGS ROUTES ......................................
 
-# Get song ---> To view the songs
+# Get song ---> To view the songs; EDIT SONG
 @app.route('/song/<int:song_id>', methods=['GET'])
 @login_required
 def get_song(song_id):
     
-    song = db.session.query(Song, User.username).join(User, Song.creator_id == User.id).filter(Song.id == song_id).first()
-    return render_template('song.html', user=current_user, song=song[0], creator=song[1])
-
-
-# Update song --> To edit the name of the song
-@app.route('/song/<int:song_id>/update', methods=['GET', 'POST'])
-@login_required
-def edit_song(song_id):
-        
     song = Song.query.filter_by(id=song_id).first()
 
     form = EditSongForm(obj=song)
@@ -361,8 +366,8 @@ def edit_song(song_id):
 
         flash('Your song has been edited!', 'success')
         return redirect(url_for('get_song', song_id=song_id))
-        
-    return render_template('song_edit.html', form=form)
+
+    return render_template('song.html', user=current_user, song=song, form=form)
 
 # Delete song --> To delete the song
 @app.route('/song/<int:song_id>/delete', methods=['GET', 'POST'])
