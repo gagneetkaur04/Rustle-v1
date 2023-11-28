@@ -1,0 +1,26 @@
+{% extends 'layout.html' %} 
+
+{% block main %}
+
+    <div class="music-page">
+        <div class="song-details">
+        <music-card
+            artist="{{ song.creator_id }}"
+            title="{{ song.song_title }}"
+            image="{{ url_for('static', filename='images/' + 'default_song.jpg') }}"
+            audio="{{ url_for('static', filename='audios/' + song.song_path) }}">
+            <music-card>
+        </div>
+        <div class="lyrics">
+            <h4 class="heading">Lyrics</h4>
+            <div class="song-lyrics">
+                <pre>{{ song.lyrics }}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- MUSIC CARD JS  -->
+    <script type="module" src="/static/js/index.js"></script>
+    
+{% endblock %}
+
