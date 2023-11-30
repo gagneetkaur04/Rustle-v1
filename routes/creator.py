@@ -5,7 +5,7 @@ from flask_login import current_user,login_required
 from models import Song, Album
 from forms import *
 from app import app
-from routes.utils import save_audio, logger
+from routes.utils import save_audio, logger, delete_audio 
 
 
 # Creator Profile ; Add Album ;  Add Song
@@ -136,7 +136,9 @@ def get_song(song_id):
     if not current_user.is_creator:
         return redirect(url_for('error'))
     
-    song = Song.query.filter_by(id=song_id).first()
+    song = db.session.query(User, Song)\
+        .join(Song, User.id == Song.creator_id)\
+            .filter(Song.id == song_id).first()
 
     form = EditSongForm(obj=song)
 
@@ -167,6 +169,8 @@ def delete_song(song_id):
         return redirect(url_for('error'))
         
     song = Song.query.filter_by(id=song_id).first()
+    delete_audio(song.song_path)
+
     db.session.delete(song)
     db.session.commit()
 

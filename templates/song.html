@@ -5,21 +5,21 @@
     <div class="music-page">
         <div class="song-details">
         <music-card
-            artist="{{ song.creator_id }}"
-            title="{{ song.song_title }}"
+            artist="{{ song.User.username }}"
+            title="{{ song.Song.song_title }}"
             image="{{ url_for('static', filename='images/' + 'default_song.jpg') }}"
-            audio="{{ url_for('static', filename='audios/' + song.song_path) }}">
+            audio="{{ url_for('static', filename='audios/' + song.Song.song_path) }}">
             <music-card>
         </div>
 
         <div class="lyrics">
             <h4 class="heading">Lyrics</h4>
             <div class="song-lyrics">
-                <pre>{{ song.lyrics }}</pre>
+                <pre>{{ song.Song.lyrics }}</pre>
             </div>
         </div>
         
-        {% if current_user.is_creator and current_user.id==song.creator_id %}
+        {% if current_user.is_creator and current_user.id==song.Song.creator_id %}
             <div class="buttons mx-5">
                 <h4  class="mb-4">
                     Creator Controls
@@ -173,7 +173,7 @@
                             <br>
                         </div>
                     </div>
-                    <a href="{{ url_for('delete_song', song_id=song.id)}}">
+                    <a href="{{ url_for('delete_song', song_id=song.Song.id)}}">
                         <button class="btn btn-danger">Delete</button>
                     </a>
                     
