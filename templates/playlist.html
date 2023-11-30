@@ -2,9 +2,8 @@
 
 {% block main %}
 
-<div class="px-5 lt-songs-container ">
+<div class="admin-creator-page ">
     <h1 class="h3 text-light">{{ playlist.playlist_title }}</h1>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#songModal">Add Song to Playlist</button>
 
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#editPlaylistModal">
         Edit Playlist
@@ -40,35 +39,6 @@
 
 
     <!-- ..............................MODALS.........................................  -->
-
-
-    <!-- ADD SONG TO PLAYLIST MODAL  -->
-    <!-- <div class="modal fade" id="songModal" tabindex="-1" aria-labelledby="songModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="playlist-section">
-                        <div class="playlist-details">
-                            <h3 class="playlist-title">Add Song to Playlist</h3>
-                        </div>
-                    </div>
-                    <form action="" method="POST">
-                        {{ addsong_form.hidden_tag() }}
-                        <select id="song" name="song" class="form-control">
-                            {% for id, name in all_songs %}
-                                    <option value="{{ id }}">{{ name }}</option>
-                            {% endfor %}
-                        </select>
-                        <br>
-
-                        <div class="form-group">
-                            {{ addsong_form.submit(class='btn btn-success') }}
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> -->
 
     <!-- EDIT PLAYLIST MODAL  -->
     <div class="modal fade" id="editPlaylistModal" tabindex="-1" aria-labelledby="editPlaylistModalLabel" aria-hidden="true">

@@ -1,17 +1,26 @@
 {% extends 'layout.html' %}
 
 {% block main %}
-    <h1 class="ps-5 pt-5">Admin Dashboard</h1>
-    <div class="ps-5  pt-4">
-
-        <h3>Counts</h3>
-        <p>Total Songs: {{ song_count }}</p>
-        <p>Total Artists: {{ creator_count }}</p>
-        <p>Total Users: {{ user_count }}</p>
-        <p>Total Albums: {{ album_count }}</p>
-
-        <h3>Charts</h3>
+    <div class="admin-creator-page">
+        <h1>Admin Dashboard</h1>
+        <div class="counts">
     
+            <p class="count">Total Songs: {{ song_count }}</p>
+            <p class="count">Total Artists: {{ creator_count }}</p>
+            <p class="count">Total Users: {{ user_count }}</p>
+            <p class="count">Total Albums: {{ album_count }}</p>
+    
+        </div>
+    
+        <h3 class="ms-2">Charts</h3>
+        <div class="charts">
+
+            <div>
+                <!-- Embedded user statistics plot -->
+                <img src="data:image/png;base64,{{ song_data }}" alt="Song Statistics" class="stat-img">
+            </div>
+        </div>
+
     </div>
 
 {% endblock %}

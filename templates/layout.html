@@ -127,10 +127,16 @@
 
               <h5 class="mt-4">User Section</h5>
               <li>
-                <a href="{{ url_for('home_user') }}"><i class="fas fa-headphones"></i> All Songs</a>
+                <a href="{{ url_for('home_user') }}"><i class="fas fa-home"></i> Home</a>
               </li>
               <li>
-                  <a href="{{ url_for( 'user_profile') }}"><i class="fas fa-list"></i> Playlists</a>
+                <a href="{{ url_for('all_songs') }}"><i class="fas fa-headphones"></i> All Songs</a>
+              </li>
+              <li>
+                <a href="{{ url_for('all_albums') }}"><i class="fas fa-compact-disc"></i> All Albums</a>
+              </li>
+              <li>
+                  <a href="{{ url_for( 'user_profile') }}"><i class="fas fa-list"></i>My Playlists</a>
               </li>
 
               {% if current_user.is_creator %}
