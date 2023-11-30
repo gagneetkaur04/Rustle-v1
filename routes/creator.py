@@ -1,6 +1,6 @@
 from database import db
 from datetime import datetime
-from flask import render_template, request, current_app as app, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user,login_required
 from models import Song, Album
 from forms import *
@@ -12,6 +12,9 @@ from routes.utils import save_audio, logger
 @app.route('/creator', methods=['GET', 'POST'])
 @login_required
 def creator_profile():
+
+    if not current_user.is_creator:
+        return redirect(url_for('error'))
 
     user = current_user
     album_form = AlbumForm()
@@ -77,12 +80,15 @@ def creator_profile():
     return render_template('creator_profile.html', album_form=album_form, user=user, song_form=song_form)
 
 
-# ................................... CREATOR ALBUM ROUTES ......................................
+# ................................... ALBUMS ROUTES ......................................
 
 # Get album ---> To view the songs in the album ; Edit Album
 @app.route('/album/<int:album_id>', methods=['GET', 'POST'])
 @login_required
 def get_album(album_id):
+
+    if not current_user.is_creator:
+        return redirect(url_for('error'))
 
     album= Album.query.filter_by(id=album_id).first()
     songs = Song.query.filter_by(album_id=album_id).all()
@@ -108,6 +114,9 @@ def get_album(album_id):
 @app.route('/album/<int:album_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_album(album_id):
+
+    if not current_user.is_creator:
+        return redirect(url_for('error'))
         
     album = Album.query.filter_by(id=album_id).first()
     db.session.delete(album)
@@ -117,12 +126,15 @@ def delete_album(album_id):
     return redirect(url_for('creator_profile'))
 
 
-# ................................... CREATOR SONGS ROUTES ......................................
+# ................................... SONGS ROUTES ......................................
 
 # Get song ---> To view the songs; EDIT SONG
 @app.route('/song/<int:song_id>', methods=['GET'])
 @login_required
 def get_song(song_id):
+
+    if not current_user.is_creator:
+        return redirect(url_for('error'))
     
     song = Song.query.filter_by(id=song_id).first()
 
@@ -150,12 +162,13 @@ def get_song(song_id):
 @app.route('/song/<int:song_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_song(song_id):
+
+    if not current_user.is_creator:
+        return redirect(url_for('error'))
         
     song = Song.query.filter_by(id=song_id).first()
     db.session.delete(song)
     db.session.commit()
-
-
 
     flash('Your song has been deleted!', 'success')
     return redirect(url_for('creator_profile'))

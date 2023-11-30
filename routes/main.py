@@ -1,8 +1,8 @@
 from database import db
 from flask import render_template, request, current_app as app, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
-from models import User
-from forms import *
+from models import User, Song
+from forms import RegistrationForm, LoginForm
 from app import bcrypt, app
 
 
@@ -10,8 +10,11 @@ from app import bcrypt, app
 @app.route("/", methods=['GET', 'POST'])
 def welcome():
     if current_user.is_authenticated:
-        return redirect(url_for('home_user'))
-    
+        if not current_user.is_admin:
+            return redirect(url_for('home_user'))
+        else:
+            return redirect(url_for('admin_dashboard'))
+
     return render_template('welcome.html')
 
 
@@ -29,6 +32,9 @@ def register():
         user = User(username=form.username.data, 
                     email=form.email.data, 
                     password=hashed_password)
+        
+        if form.email.data == app.config['ADMIN_USERNAME'] and form.password.data == app.config['ADMIN_PASSWORD']:
+            user.is_admin = True
 
         db.session.add(user)
         db.session.commit()
@@ -42,13 +48,17 @@ def register():
 # Login Route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and not current_user.is_admin:
         return redirect(url_for('home_user'))
     
     form = LoginForm()
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
+
+        if form.email.data == app.config['ADMIN_USERNAME'] and form.password.data == app.config['ADMIN_PASSWORD']:
+            login_user(user)
+            return redirect(url_for('admin_dashboard'))
 
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
@@ -73,3 +83,20 @@ def logout():
 @login_required
 def search():
     pass
+
+
+# User Home Page
+@app.route('/home_user', methods=['GET', 'POST'])
+@login_required
+def home_user():
+
+    user = current_user
+    latest_songs = Song.query.order_by(Song.date_created.desc()).all()
+    
+    return render_template('home_user.html', user=user, latest_songs=latest_songs)
+
+
+# Error Page
+@app.route("/error", methods=['GET', 'POST'])
+def error():
+    return render_template('error.html')

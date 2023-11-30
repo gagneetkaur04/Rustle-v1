@@ -2,20 +2,10 @@ from database import db
 from flask import render_template, request, current_app as app, redirect, url_for, flash
 from flask_login import current_user,login_required
 from models import Song, Playlist
-from forms import *
+from forms import PlaylistForm, EditPlaylistForm, AddToPlaylistForm
 from app import app
 from routes.utils import logger
 
-# User Home Page
-@app.route('/home_user', methods=['GET', 'POST'])
-@login_required
-def home_user():
-
-    user = current_user
-    latest_songs = Song.query.order_by(Song.date_created.desc()).all()
-    
-    return render_template('home_user.html', user=user, latest_songs=latest_songs)
-    
 
 # Become Artist
 @app.route('/become_artist', methods=['GET', 'POST'])
@@ -32,7 +22,7 @@ def become_artist():
 
 
 
-# ................................... USER PLAYLIST ROUTES ......................................
+# ...................................PLAYLIST ROUTES ......................................
 
 # User Profile/Dashboard and Create Playist
 @app.route('/user', methods=['GET', 'POST'])
@@ -65,7 +55,7 @@ def user_profile():
         return render_template('user_profile.html', form=form)
     
 
-#............................... Get Playlist ---> Create,Update and Read Playlist...............................
+# Get Playlist ---> Update and Read Playlist 
 @app.route('/user/playlist/<int:playlist_id>', methods=['GET', 'POST'])
 @login_required
 def get_playlist(playlist_id):
@@ -110,7 +100,7 @@ def get_playlist(playlist_id):
                                             edit_playlist_form=edit_playlist_form)
 
 
-#................. Delete Playlist --> To delete the playlist......................
+# Delete Playlist --> To delete the playlist 
 @app.route('/user/playlist/<int:playlist_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_playlist(playlist_id):
@@ -123,7 +113,7 @@ def delete_playlist(playlist_id):
         return redirect(url_for('user_profile'))
 
 
-#.................................... PLAY A SONG...................................
+# PLAY A SONG AND ADD TO PLAYLIST
 @app.route('/play_song/<int:song_id>', methods=['GET', 'POST'])
 @login_required
 def play_song(song_id):
