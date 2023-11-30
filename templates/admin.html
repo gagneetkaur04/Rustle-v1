@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+    <h1 class="ps-5 pt-5">Admin Dashboard</h1>
+    <div class="ps-5  pt-4">
+
+        <h3>Counts</h3>
+        <p>Total Songs: {{ song_count }}</p>
+        <p>Total Artists: {{ creator_count }}</p>
+        <p>Total Users: {{ user_count }}</p>
+        <p>Total Albums: {{ album_count }}</p>
+
+        <h3>Charts</h3>
+    
+    </div>
+
+{% endblock %}

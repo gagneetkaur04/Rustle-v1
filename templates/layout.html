@@ -65,19 +65,26 @@
                       <img src="/static/images/default_user.png" alt="mdo" width="40" height="40" class="rounded-circle">
                     </a>
                     <ul class="dropdown-menu text-small shadow">
-                      <li><a class="dropdown-item" href="{{ url_for('home_user')  }}">Home</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('user_profile')  }}">My User Profile</a></li>
-        
-        
-                      {% if not current_user.is_creator %}
-                      <li><a class="dropdown-item" href="{{ url_for('become_artist')  }}">Become Artist</a></li>
+                      {% if not current_user.is_admin %}
+
+                        <li><a class="dropdown-item" href="{{ url_for('home_user')  }}">Home</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('user_profile')  }}">My User Profile</a></li>
+          
+                        {% if not current_user.is_creator %}
+                          <li><a class="dropdown-item" href="{{ url_for('become_artist')  }}">Become Artist</a></li>
+                          {% else %}
+                          <li><a class="dropdown-item" href="{{ url_for('creator_profile')  }}">My Artist Profile</a></li>
+                        {% endif %}
+          
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+
                       {% else %}
-                      <li><a class="dropdown-item" href="{{ url_for('creator_profile')  }}">My Artist Profile</a></li>
+
+                        <li><a class="dropdown-item" href="{{ url_for('admin_dashboard')  }}">Dashboard</a></li>
+
                       {% endif %}
-        
-                      <li>
-                        <hr class="dropdown-divider">
-                      </li>
                       <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sign out</a></li>
                     </ul>
                   </div>
@@ -115,25 +122,48 @@
             <h3 class="logo-text d-inline-block mt-3">Rustle</h3>
           </div>
           <ul class="list-unstyled components">
-            <h5 class="mt-4">User Section</h5>
-            <li>
-              <a href="{{ url_for('home_user') }}"><i class="fas fa-headphones"></i> All Songs</a>
-            </li>
-            <li>
-                <a href="{{ url_for( 'user_profile') }}"><i class="fas fa-list"></i> Playlists</a>
-            </li>
 
-            {% if current_user.is_creator %}
+            {% if not current_user.is_admin %}
 
-              <div class="mt-2">
-                <h5 class="mt-4">Artist Section</h5>
-                <li>
-                    <a href="{{ url_for('creator_profile',_anchor='tabone') }}"><i class="fas fa-compact-disc"></i> My Albums </a>
-                </li>
-                <li>
-                    <a href="{{ url_for( 'creator_profile', _anchor='tabtwo') }}"><i class="fas fa-music"></i> My Songs </a>
-                </li>
-              </div>
+              <h5 class="mt-4">User Section</h5>
+              <li>
+                <a href="{{ url_for('home_user') }}"><i class="fas fa-headphones"></i> All Songs</a>
+              </li>
+              <li>
+                  <a href="{{ url_for( 'user_profile') }}"><i class="fas fa-list"></i> Playlists</a>
+              </li>
+
+              {% if current_user.is_creator %}
+
+                <div class="mt-2">
+                  <h5 class="mt-4">Artist Section</h5>
+                  <li>
+                      <a href="{{ url_for('creator_profile',_anchor='tabone') }}"><i class="fas fa-compact-disc"></i> My Albums </a>
+                  </li>
+                  <li>
+                      <a href="{{ url_for( 'creator_profile', _anchor='tabtwo') }}"><i class="fas fa-music"></i> My Songs </a>
+                  </li>
+                </div>
+
+              {% endif %}
+            
+            {% else %}
+                
+              <li>
+                <a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+              </li>
+              <li>
+                <a href="{{ url_for('admin_users') }}"><i class="fas fa-users"></i> Users</a>
+              </li>
+              <li>
+                <a href="{{ url_for('admin_creators') }}"><i class="fas fa-user-tie"></i> Creators</a>
+              </li>
+              <li>
+                <a href="{{ url_for('admin_songs') }}"><i class="fas fa-music"></i> Songs</a>
+              </li>
+              <li>
+                <a href="{{ url_for('admin_albums') }}"><i class="fas fa-compact-disc"></i> Albums</a>
+              </li>
 
             {% endif %}
 

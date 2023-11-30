@@ -1,0 +1,146 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+
+    <div class="admin-creator-page">
+
+        <!-- CREATOR INFO  -->
+        <div class="admin-user-info ps-4">
+            {% if not user.is_blacklisted %}
+                <img src="/static/images/default_user.png" alt="Artist {{ user.id}}">
+            {% else %}
+                <img src="/static/images/blacklisted.png" alt="Artist {{ user.id}}">
+            {% endif %}
+    
+            <div class="user-details">
+                <h1>{{ user.username }}</h1>
+            </div>
+
+            <div class="title-button">
+                <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteCreatorModal">Delete Creator</button>
+                
+                {% if user.is_blacklisted %}
+                    <button class="whitelist-button" data-bs-toggle="modal" data-bs-target="#blacklistCreatorModal">Whitelist</button>
+                {% else %}
+                    <button class="blacklist-button" data-bs-toggle="modal" data-bs-target="#blacklistCreatorModal">Blacklist</button>
+                {% endif %}
+            </div>
+    
+        </div>
+    
+        <!-- CREATOR SONGS -->
+    
+        <h1 class="ps-5 pt-5">Songs</h1>
+        <div class="card-container">
+            {% if song_count == 0 %}
+                <h6 class="ms-3">No Songs Created</h6>
+            {% else %}
+                {% for song in songs %}
+                    <div>
+                        <a href="{{ url_for('admin_song', song_id=song.id) }}" class="card">
+
+                            {% if song.is_flagged %}
+                                <img src="/static/images/flagged_song.png" alt="Song {{ song.song_id}} ">
+                            {% else %}
+                                <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
+                            {% endif %}
+
+                            <div class="overlay">
+                                <div class="overlay-content">
+                                    <h3 class="song-title">{{ song.song_title }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                        <h6 class="song-title mx-auto">{{ song.song_title }}</h6>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    
+        <!-- CREATOR ALBUMS  -->
+    
+        <h1 class="ps-5 pt-2">Albums</h1>
+        <div class="card-container">
+            {% if album_count == 0 %}
+                <h6 class="ms-3">No Albums Created</h6>
+            {% else %}
+                {% for album in albums %}
+                    <div>
+                        <a href="{{ url_for('admin_album', album_id=album.id) }}" class="card">
+
+                            {% if album.is_flagged %}
+                                <img src="/static/images/flagged_album.png" alt="Album {{ album.album_id}} ">
+                            {% else %}
+                                <img src="/static/images/default_album.jpg" alt="Album {{ album.album_id}} ">
+                            {% endif %}
+
+                            <div class="overlay">
+                                <div class="overlay-content">
+                                    <h3 class="song-title">{{ album.album_name }}</h3>
+                                    <h6 class="mx-auto genre">{{ album.genre }}</h6>
+                                </div>
+                            </div>
+                        </a>
+                        <h6 class="song-title mx-auto">{{ album.album_name }}</h6>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- DELETE USER MODAL -->
+
+        <div class="modal fade" id="deleteCreatorModal" tabindex="-1" aria-labelledby="deleteCreatorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="playlist-section">
+                            <div class="playlist-details">
+                                <h3 class="playlist-title">Delete Creator?</h3>
+                                <br>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('admin_user_delete', user_id=user.id)}}">
+                            <button class="btn btn-danger">Delete</button>
+                        </a>
+                        
+                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- BLACKLIST CREATOR MODAL -->
+        <div class="modal fade" id="blacklistCreatorModal" tabindex="-1" aria-labelledby="blacklistCreatorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="playlist-section">
+                            <div class="playlist-details">
+                                {% if user.is_blacklisted %}
+                                    <h3 class="playlist-title">Whitelist Creator?</h3>
+                                {% else %}
+                                    <h3 class="playlist-title">Blacklist Creator?</h3>
+                                {% endif %}
+                                <br>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('admin_creator_blacklist', user_id=user.id)}}">
+                            {% if user.is_blacklisted %}
+                                <button class="btn btn-danger">Whitelist</button>
+                            {% else %}
+                                <button class="btn btn-danger">Blacklist</button>
+                            {% endif %}
+                        </a>
+                        
+                        <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

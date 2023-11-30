@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<div class="admin-album-page">
+    <div class="admin-user-info ps-4">
+        {% if album.is_flagged %}
+            <img src="/static/images/flagged_album.png" alt="Album {{ album.album_id}} ">
+        {% else %}
+            <img src="/static/images/default_album.jpg" alt="Album {{ album.album_id}} ">
+        {% endif %}
+
+        <h1 class="album-title">{{ album.album_name }}</h1>
+        <h6 class="genre">{{ album.genre }}</h6>
+    </div>
+
+    <div class="title-button">
+        <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">Delete Album</button>
+
+        {% if album.is_flagged %}
+            <button class="whitelist-button" data-bs-toggle="modal" data-bs-target="#flagAlbumModal">Unflag Album</button>
+        {% else %}
+            <button class="blacklist-button" data-bs-toggle="modal" data-bs-target="#flagAlbumModal">Flag Album</button>
+        {% endif %}
+
+    </div>
+
+
+    <div class="album-songs">
+        <ul class="song-list">
+            {% for song in songs %}
+                <div class="one-song">
+                    <li class="song-contents">
+                        <h3 class="song-title">{{ song.song_title }}</h3>
+        
+                        <a href="{{ url_for('admin_song', song_id=song.id )}}">
+                            <button class="playsong">
+                                <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
+                            </button>
+                        </a>
+                        
+                    </li>
+                    <p class="song-artist">Artist : {{ song.creator_id }}</p>
+                    <p>(Released on {{ song.date_created.strftime('%Y-%m-%d') }})</p>
+                </div>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+<!-- DELETE ALBUM MODAL  -->
+
+<div class="modal fade" id="deleteAlbumModal" tabindex="-1" aria-labelledby="deleteAlbumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="playlist-section">
+                    <div class="playlist-details">
+                        <h3 class="playlist-title">Delete Album?</h3>
+                        <br>
+                    </div>
+                </div>
+                <a href="{{ url_for('admin_album_delete', album_id=album.id)}}">
+                    <button class="btn btn-danger">Delete</button>
+                </a>
+                
+                <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FLAG ALBUM MODAL  -->
+
+<div class="modal fade" id="flagAlbumModal" tabindex="-1" aria-labelledby="flagAlbumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="playlist-section">
+                    <div class="playlist-details">
+                        {% if album.is_flagged %}
+                            <h3 class="playlist-title">Unflag Album?</h3>
+                        {% else %}
+                            <h3 class="playlist-title">Flag Album?</h3>
+                        {% endif %}
+                        <br>
+                    </div>
+                </div>
+                <a href="{{ url_for('admin_album_flag', album_id=album.id)}}">
+                    {% if album.is_flagged %}
+                        <button class="btn btn-danger">Unflag</button>
+                    {% else %}
+                        <button class="btn btn-danger">Flag</button>
+                    {% endif %}
+                </a>
+                
+                <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

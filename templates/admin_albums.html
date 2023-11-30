@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+
+    <div class="admin-creator-page">
+        <h1>Albums</h1>
+        <p>Total Albums: {{ album_count }}</p>
+
+        <div class="card-container">
+            {% if album_count == 0 %}
+                <h6 class="ms-3">No Songs Created</h6>
+            {% else %}
+                {% for album in albums %}
+                    <div class="mb-5 admin-cards">
+                        <a href="{{ url_for('admin_album', album_id=album.id) }}" class="card">
+
+                            {% if album.is_flagged %}
+                                <img src="/static/images/flagged_album.png" alt="Album {{ album.album_id }} ">
+                            {% else %}
+                                <img src="/static/images/default_album.jpg" alt="Album {{ album.album_id }} ">
+                            {% endif %}
+
+                            <div class="overlay">
+                                <div class="overlay-content">
+                                    <h3 class="song-title">{{ album.album_name }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                        <h4 class="song-title mx-auto" style="width: max-content;">{{ album.album_name }}</h4>             
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    
+    </div>
+
+{% endblock %}

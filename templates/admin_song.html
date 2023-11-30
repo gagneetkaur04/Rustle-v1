@@ -1,0 +1,94 @@
+{% extends 'layout.html' %} 
+
+{% block main %}
+
+    <div class="music-page">
+        <div class="song-details">
+        <music-card
+            artist="{{ song.creator_id }}"
+            title="{{ song.song_title }}"
+            image="{{ url_for('static', filename='images/' + 'default_song.jpg') }}"
+            audio="{{ url_for('static', filename='audios/' + song.song_path) }}">
+            <music-card>
+        </div>
+        <div class="lyrics">
+            <h4 class="heading">Lyrics</h4>
+            <div class="song-lyrics">
+                <pre>{{ song.lyrics }}</pre>
+            </div>
+        </div>
+        <div class="buttons mx-5">
+            <h4  class="mb-4">
+                Admin Controls
+            </h4>
+            <div class="title-button">
+                <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteSongModal">Delete Song</button>
+
+                {% if song.is_flagged %}
+                    <button class="whitelist-button" data-bs-toggle="modal" data-bs-target="#flagSongModal">Unflag Song</button>
+                {% else %}
+                    <button class="blacklist-button" data-bs-toggle="modal" data-bs-target="#flagSongModal">Flag Song</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE SONG MODAL  -->
+
+    <div class="modal fade" id="deleteSongModal" tabindex="-1" aria-labelledby="deleteSongModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Delete Song?</h3>
+                            <br>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('admin_song_delete', song_id=song.id)}}">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                    
+                    <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLAG SONG MODAL  -->
+
+    <div class="modal fade" id="flagSongModal" tabindex="-1" aria-labelledby="flagSongModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            {% if song.is_flagged %}
+                                <h3 class="playlist-title">Unflag Song?</h3>
+                            {% else %}
+                                <h3 class="playlist-title">Flag Song?</h3>
+                            {% endif %}
+                            <br>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('admin_song_flag', song_id=song.id)}}">
+                        {% if song.is_flagged %}
+                            <button class="btn btn-danger">Unflag</button>
+                        {% else %}
+                            <button class="btn btn-danger">Flag</button>
+                        {% endif %}
+                    </a>
+                    
+                    <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MUSIC CARD JS  -->
+    <script type="module" src="/static/js/index.js"></script>
+    
+{% endblock %}
+

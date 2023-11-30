@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+
+    <h1 class="ps-5 pt-5">Users</h1>
+
+    <div class="ps-5  pt-4">
+
+        <p>Total Users: {{ user_count }}</p>
+
+        <div class="card-container">
+            {% for user in users %}
+                <div class="admin-cards">
+                    <a href="{{ url_for('admin_user', user_id=user.id) }}" class="card">
+                        <img src="/static/images/default_user.png" alt="User {{ user.id}}">
+                        <div class="overlay">
+                            <div class="overlay-content">
+                                <h3 class="song-title">{{ user.username }}</h3>
+                            </div>
+                        </div>
+                    </a>
+                    <h4 class="song-title mx-auto" style="width: max-content;">{{ user.username }}</h4>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+{% endblock %}

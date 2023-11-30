@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+
+    <div class="admin-user-page">
+
+        <!-- CREATOR INFO  -->
+        <div class="admin-user-info ps-4">
+
+            <img src="/static/images/default_user.png" alt="Artist {{ user.id}}">
+        
+            <div class="user-details">
+                <h1>{{ user.username }}</h1>
+            </div>
+        </div>
+
+        <div class="title-button">
+            <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteUserModal">Delete User</button>
+        </div>
+
+    </div>
+
+    <!-- DELETE USER MODAL -->
+
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Delete User?</h3>
+                            <br>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('admin_user_delete', user_id=user.id)}}">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                    
+                    <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

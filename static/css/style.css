@@ -55,7 +55,7 @@ a{
 /* ....................LOGIN-REGISTER PAGE...........................  */
 
 .login-box{
-  background-color: #46838a;
+  background-color: #ffffff5e;
   width: 400px;
   height: 400px;
   border-radius: 12px;
@@ -66,7 +66,7 @@ a{
 }
 
 .register-box{
-  background-color: #46838a;
+  background-color: #ffffff5e;
   width: 400px;
   height: 600px;
   border-radius: 12px;
@@ -199,6 +199,7 @@ input[type="search"]::placeholder {
   margin-left: 15%;
   width: 90%;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 #sidebar {
@@ -328,9 +329,10 @@ input[type="search"]::placeholder {
 .lyrics{
   padding-left: 40px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column;;
 }
 .music-page .song-lyrics{
+  max-width: 600px;
   width: max-content;
   overflow-y: auto;
   font-size: larger;
@@ -485,6 +487,12 @@ input[type="search"]::placeholder {
   text-align: center;
 }
 
+.overlay-content .song-title {
+  max-width: 200px;
+}
+
+
+
 .song-title,
 .artist,
 .release-date {
@@ -514,9 +522,18 @@ input[type="search"]::placeholder {
   border-radius: 8px;
 }
 
+.edit-button:hover{
+  background-color: #40afaf;
+}
+
 .delete-button{
   background-color: #521212;
 }
+
+.delete-button:hover{
+  background-color: #a00f0f;
+}
+
 
 .album-songs{
   display: flex;
@@ -652,4 +669,157 @@ body::-webkit-scrollbar-thumb:hover {
   font-weight: bold;
   transition: background ease 0.2s;
 	border-radius: 8px 8px 0 0;
+}
+
+/* ADMIN PAGE  */
+
+.admin-creator-page .title-button{
+  display: flex;
+  flex-direction: row;
+  padding: 0 20px;
+  width: max-content;
+  margin-top: 30px;
+  margin-left: 5px;
+}
+
+.admin-user-page .title-button{
+  display: flex;
+  flex-direction: row;
+  padding: 0 20px;
+  width: max-content;
+  margin-top: 30px;
+  margin-left: 30px;
+}
+
+.admin-cards img{
+  width: 200px;
+  height: 200px;
+}
+
+.admin-cards a{
+  width: 200px;
+  height: 200px;
+}
+
+.admin-cards card{
+  justify-self: center;
+}
+
+.whitelist-button{
+  background-color: #ffffff;
+  border: none;
+  color: rgb(0, 0, 0);
+  padding: 5px 10px;
+  text-align: center;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.whitelist-button:hover{
+  background-color: #ffffffc1;
+}
+
+.blacklist-button{
+  background-color: #000000;
+  border: none;
+  color: rgb(255, 255, 255);
+  padding: 5px 10px;
+  text-align: center;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.blacklist-button:hover{
+  background-color: #000000c9;
+}
+
+.admin-creator-page{
+  margin-left: 100px;
+  margin-top: 50px;
+}
+
+.admin-user-page{
+  margin-left: 100px;
+  margin-top: 50px;
+}
+
+.admin-album-page{
+  margin-left: 100px;
+  margin-top: 50px;
+}
+
+.admin-album-page img{
+  width: 150px;
+  height: 150px;
+}
+
+.admin-album-page .album-title{
+  font-size: 30px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  color: #000000;
+}
+
+.admin-album-page .genre{
+  font-size: 20px;
+  margin-left: 10px;
+}
+
+.admin-album-page .title-button{
+  display: flex;
+  flex-direction: row;
+  padding: 0 20px;
+  width: max-content;
+  margin-top: 30px;
+  margin-left: 12px;
+}
+
+.admin-album-page .album-songs{
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-left: 15px;
+  max-width: fit-content;
+}
+
+.admin-user-page .admin-user-info img{
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  margin-left: 10px;
+}
+
+.admin-creator-page .admin-user-info img{
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  margin-left: 10px;
+}
+
+.admin-user-info h1{
+  font-size: 30px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.admin-creator-page a{
+  width: 200px;
+  height: 200px;
+}
+
+.admin-creator-page img{
+  width: 200px;
+  height: 200px;
+}
+
+.admin-creator-page .song-title{
+  font-size: 14px;
+}
+
+.admin-creator-page .genre{
+  font-size: 10px;
 }

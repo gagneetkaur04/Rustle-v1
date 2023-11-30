@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+
+    <h1 class="ps-5 pt-5">Creators</h1>
+
+    <div class="ps-5  pt-4">
+
+        <p>Total Creators: {{ creator_count }}</p>
+
+        <div class="card-container">
+            {% for creator in creators %}
+                <div class="admin-cards">
+                    <a href="{{ url_for('admin_creator', user_id=creator.id) }}" class="card">
+                        {% if not creator.is_blacklisted %}
+                            <img src="/static/images/default_user.png" alt="Artist {{ creator.id}}">
+                        {% else %}
+                            <img src="/static/images/blacklisted.png" alt="Artist {{ creator.id}}">
+                        {% endif %}
+                        
+                        <div class="overlay">
+                            <div class="overlay-content">
+                                <h3 class="song-title">{{ creator.username }}</h3>
+                            </div>
+                        </div>
+                    </a>
+                    <h4 class="song-title mx-auto" style="width: max-content;">{{ creator.username }}</h4>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+{% endblock %}
