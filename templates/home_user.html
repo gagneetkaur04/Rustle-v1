@@ -9,19 +9,18 @@
             {% for song in latest_songs %}
                 <div class="one-song">
                     <li class="song-contents">
-                        <h3 class="song-title">{{ song.song_title }}</h3>
+                        <h3 class="song-title">{{ song.Song.song_title }}</h3>
 
-                        <a href="{{ url_for('play_song', song_id=song.id )}}">
+                        <a href="{{ url_for('play_song', song_id=song.Song.id )}}">
                             <button class="playsong">
                                 <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
                             </button>
                         </a>
                         
                     </li>
-                    <p class="song-artist">Artist : {{ song.creator_id }}</p> 
-                    <p class="song-artist">Album : {{ song.album_id }}</p>
-                    <p>(Released on {{ song.date_created.strftime('%d-%m-%Y') }})</p>
-
+                    <p class="song-artist">Artist : {{ song.User.username }}</p> 
+                    <p class="song-artist">Album : {{ song.Album.album_name }}</p>
+                    <p>(Released on {{ song.Song.date_created.strftime('%d-%m-%Y') }})</p>
                 </div>
             {% endfor %}
         </ul>

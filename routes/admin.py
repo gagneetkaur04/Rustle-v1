@@ -3,8 +3,7 @@ from flask import render_template, current_app as app, redirect, url_for, flash
 from flask_login import current_user,login_required
 from models import Song, User, Album
 from app import app
-from routes.utils import get_song_count, get_creator_count, get_user_count, get_album_count
-
+from routes.utils import get_song_count, get_creator_count, get_user_count, get_album_count, song_charts
 
 # >>>>>>>>>>>>>>>>>> ADMIN DASHBOARD <<<<<<<<<<<<<<<<<<<<<<< 
 @app.route("/admin", methods=['GET', 'POST'])
@@ -17,9 +16,15 @@ def admin_dashboard():
     creator_count = get_creator_count()
     user_count = get_user_count()
     album_count = get_album_count()
-    # chart_data = generate_charts()
+    song_data = song_charts()
 
-    return render_template('admin.html', song_count=song_count, creator_count=creator_count, user_count=user_count, album_count=album_count)
+
+    return render_template('admin.html', 
+                           song_count=song_count, 
+                            creator_count=creator_count, 
+                            user_count=user_count, 
+                            album_count=album_count, 
+                            song_data=song_data)
 
 
 # >>>>>>>>>>>>>>>>>> ADMIN USERS <<<<<<<<<<<<<<<<<<<<<<< 
@@ -96,8 +101,18 @@ def admin_creator_delete(user_id):
         return redirect(url_for('error'))
     
     user = User.query.get_or_404(user_id)
+    songs = Song.query.filter_by(creator_id=user_id).all()
+    albums = Album.query.filter_by(creator_id=user_id).all()
+
+    for song in songs:
+        db.session.delete(song)
+
+    for album in albums:
+        db.session.delete(album)
+
     db.session.delete(user)
     db.session.commit()
+
     flash('Creator deleted', 'success')
     return redirect(url_for('admin_creators'))
 
@@ -142,7 +157,10 @@ def admin_song(song_id):
     if not current_user.is_admin:
         return redirect(url_for('error'))
     
-    song = Song.query.get_or_404(song_id)
+    song = db.session.query(User, Song)\
+    .join(Song, User.id == Song.creator_id)\
+        .filter(Song.id == song_id).first()
+    
     return render_template('admin_song.html', song=song)
 
 
@@ -215,8 +233,12 @@ def admin_album_delete(album_id):
         return redirect(url_for('error'))
     
     album = Album.query.get_or_404(album_id)
+    songs = Song.query.filter_by(album_id=album_id).all()
+
+    db.session.delete(songs)
     db.session.delete(album)
     db.session.commit()
+
     flash('Album deleted', 'success')
     return redirect(url_for('admin_albums'))
 

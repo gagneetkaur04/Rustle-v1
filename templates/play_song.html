@@ -5,16 +5,55 @@
     <div class="music-page">
         <div class="song-details">
         <music-card
-            artist="{{ song.creator_id }}"
-            title="{{ song.song_title }}"
+            artist="{{ song.User.username }}"
+            title="{{ song.Song.song_title }}"
             image="{{ url_for('static', filename='images/' + 'default_song.jpg') }}"
-            audio="{{ url_for('static', filename='audios/' + song.song_path) }}">
+            audio="{{ url_for('static', filename='audios/' + song.Song.song_path) }}">
             <music-card>
         </div>
         <div class="lyrics">
             <h4 class="heading">Lyrics</h4>
             <div class="song-lyrics">
-                <pre>{{ song.lyrics }}</pre>
+                <pre>{{ song.Song.lyrics }}</pre>
+            </div>
+        </div>
+        <div class="buttons mx-5">
+            <h4  class="mb-4">
+                User Controls
+            </h4>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addToPlaylistModal">Add to Playlist</button>
+        </div>
+    </div>
+
+
+
+    <!-- ADD TO PLAYLIST MODAL  -->
+    <div class="modal fade" id="addToPlaylistModal" tabindex="-1" aria-labelledby="addToPlaylistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="playlist-section">
+                        <div class="playlist-details">
+                            <h3 class="playlist-title">Add to Playlist</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                        </div>
+                    </div>
+                    <form action="" method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <select id="playlist" name="playlist" class="form-control">
+                            {% for id, name in playlists %}
+                                    <option value="{{ id }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+
+                        <div class="form-group">
+                            {{ form.submit(class='btn btn-success') }}
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
