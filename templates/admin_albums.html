@@ -4,7 +4,9 @@
 
     <div class="admin-creator-page">
         <h1>Albums</h1>
-        <p>Total Albums: {{ album_count }}</p>
+        {% if current_user.is_admin %}
+            <p>Total Albums: {{ album_count }}</p>
+        {% endif %}
 
         <div class="card-container">
             {% if album_count == 0 %}
@@ -12,7 +14,12 @@
             {% else %}
                 {% for album in albums %}
                     <div class="mb-5 admin-cards">
-                        <a href="{{ url_for('admin_album', album_id=album.id) }}" class="card">
+
+                        {% if current_user.is_admin %}
+                            <a href="{{ url_for('admin_album', album_id=album.id) }}" class="card">
+                        {% else %}
+                            <a href="{{ url_for('get_album', album_id=album.id) }}" class="card">
+                        {% endif %}
 
                             {% if album.is_flagged %}
                                 <img src="/static/images/flagged_album.png" alt="Album {{ album.album_id }} ">

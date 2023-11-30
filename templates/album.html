@@ -2,16 +2,19 @@
 
 {% block main %}
 
-<div class="px-5 lt-songs-container ">
+<div class="admin-album-page ">
     <h1 class="text-light">{{ album.album_name }}</h1>
 
-    <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
-        Edit Album
-    </button>
+    {% if current_user.is_creator and current_user.id==album.creator_id %}
+        <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
+            Edit Album
+        </button>
 
-    <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
-        Delete Album
-    </button>
+        <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
+            Delete Album
+        </button>
+    {% endif %}
+
 </div>
 
 <div class="album-songs">

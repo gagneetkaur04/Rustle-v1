@@ -4,7 +4,9 @@
 
     <div class="admin-creator-page">
         <h1>Songs</h1>
-        <p>Total Songs: {{ song_count }}</p>
+        {% if current_user.is_admin %}
+            <p>Total Songs: {{ song_count }}</p>
+        {% endif %}
 
         <div class="card-container">
             {% if song_count == 0 %}
@@ -12,7 +14,12 @@
             {% else %}
                 {% for song in songs %}
                     <div class="mb-5 admin-cards">
+
+                        {% if current_user.is_admin %}                            
                         <a href="{{ url_for('admin_song', song_id=song.id) }}" class="card">
+                        {% else %}
+                        <a href="{{ url_for('play_song', song_id=song.id) }}" class="card">
+                        {% endif %}
 
                             {% if song.is_flagged %}
                                 <img src="/static/images/flagged_song.png" alt="Song {{ song.song_id}} ">

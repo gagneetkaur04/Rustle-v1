@@ -19,23 +19,25 @@
             </div>
         </div>
         
-        <div class="buttons mx-5">
-            <h4  class="mb-4">
-                Creator Controls
-            </h4>
+        {% if current_user.is_creator and current_user.id==song.creator_id %}
+            <div class="buttons mx-5">
+                <h4  class="mb-4">
+                    Creator Controls
+                </h4>
 
-            <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editSongModal">
-                Edit Song
-            </button>
+                <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editSongModal">
+                    Edit Song
+                </button>
 
-            <br>
-            <br>
-        
-            <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteSongModal">
-                Delete Song
-            </button>
+                <br>
+                <br>
+            
+                <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteSongModal">
+                    Delete Song
+                </button>
 
-        </div>
+            </div>
+        {% endif %}
     </div>
 
     <!-- ----------------------------------------------------MODALS-------------------------------------------------------------  -->
