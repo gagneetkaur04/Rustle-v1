@@ -7,7 +7,6 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(50), nullable = False)
     email = db.Column(db.String(50), unique = True, nullable = False)
     password = db.Column(db.String(50), nullable = False)
-    # image_file = db.Column(db.String(20), nullable=False, default='default_user.jpg')
     is_creator = db.Column(db.Boolean, nullable=False, default=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     is_blacklisted = db.Column(db.Boolean, nullable=False, default=False)
@@ -35,7 +34,6 @@ class Album(db.Model):
     album_name = db.Column(db.String(50), nullable = False) 
     genre = db.Column(db.String(30))
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    # image_file = db.Column(db.String(20), nullable=False, default='default_album.jpg')
     is_flagged = db.Column(db.Boolean, nullable=False)
 
     creator_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
@@ -57,10 +55,8 @@ class Song(db.Model):
     lyrics = db.Column(db.String, nullable = False) 
     duration = db.Column(db.String, nullable = False) 
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    # image_file = db.Column(db.String(20), nullable=False, default='default_song.jpg')
     is_flagged = db.Column(db.Boolean, nullable=False, default=False)
 
-    # Define the many-to-many relationship with the Playlist model
     playlists = db.relationship('Playlist', secondary='playlist_song', back_populates='songs')
 
     def __init__(self, album_id, creator_id, song_title, song_path, lyrics, duration, date_created):
@@ -71,18 +67,14 @@ class Song(db.Model):
         self.lyrics = lyrics
         self.duration = duration
         self.date_created = date_created
-        # self.image_file = image
         self.is_flagged = False
 
 
 class Playlist(db.Model):
     id = db.Column('playlist_id', db.Integer, primary_key=True)
     playlist_title = db.Column(db.String(50), nullable = False)
-    # image_file = db.Column(db.String(20), nullable=False, default='default_playlist.jpg')
-
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
 
-    # Define the many-to-many relationship with the Song model
     songs = db.relationship('Song', secondary='playlist_song', back_populates='playlists')
 
 

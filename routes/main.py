@@ -1,7 +1,7 @@
 from database import db
 from flask import render_template, request, current_app as app, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
-from models import User, Song
+from models import User
 from forms import RegistrationForm, LoginForm
 from app import bcrypt, app
 
@@ -83,17 +83,6 @@ def logout():
 @login_required
 def search():
     pass
-
-
-# User Home Page
-@app.route('/home_user', methods=['GET', 'POST'])
-@login_required
-def home_user():
-
-    user = current_user
-    latest_songs = Song.query.order_by(Song.date_created.desc()).all()
-    
-    return render_template('home_user.html', user=user, latest_songs=latest_songs)
 
 
 # Error Page
