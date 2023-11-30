@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAr
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email() ])
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
@@ -29,33 +29,33 @@ class LoginForm(FlaskForm):
 
 
 class PlaylistForm(FlaskForm):
-    playlist_title = StringField('Title', validators=[DataRequired(), Length(min=2, max=20)])
+    playlist_title = StringField('Title', validators=[DataRequired()])
     
     submit = SubmitField('Create Playlist')
 
 class EditPlaylistForm(FlaskForm):
-    playlist_title = StringField('Title', validators=[DataRequired(), Length(min=2, max=20)])
+    playlist_title = StringField('Title', validators=[DataRequired()])
     
     submit = SubmitField('Update')
 
 
 class AlbumForm(FlaskForm):
-    album_title = StringField('Album Title', validators=[DataRequired(), Length(min=2, max=20)])
+    album_title = StringField('Album Title', validators=[DataRequired()])
     genre = StringField('Genre')
 
     submit = SubmitField('Create Album')
 
 class EditAlbumForm(FlaskForm):
-    album_title = StringField('Album Title', validators=[DataRequired(), Length(min=2, max=20)])
+    album_title = StringField('Album Title', validators=[DataRequired()])
     genre = StringField('Genre')
 
     submit = SubmitField('Update')
 
 
 class SongForm(FlaskForm):
-    song_title = StringField('Song Title', validators=[DataRequired(), Length(min=2, max=20)])
+    song_title = StringField('Song Title', validators=[DataRequired()])
     lyrics = TextAreaField('Lyrics', validators=[DataRequired()])
-    duration = StringField('Song Duration', validators=[DataRequired(), Length(min=2, max=20)])
+    duration = StringField('Song Duration', validators=[DataRequired()])
     album = SelectField('Select Album', coerce=int)
     audio_file = FileField('Audio File', validators=[DataRequired()])
 
@@ -69,9 +69,9 @@ class SongForm(FlaskForm):
                 raise ValidationError('File must be in MP3 format')
 
 class EditSongForm(FlaskForm):
-    song_title = StringField('Song Title', validators=[DataRequired(), Length(min=2, max=20)])
+    song_title = StringField('Song Title', validators=[DataRequired()])
     lyrics = TextAreaField('Lyrics', validators=[DataRequired()])
-    duration = StringField('Song Duration', validators=[DataRequired(), Length(min=2, max=20)])
+    duration = StringField('Song Duration', validators=[DataRequired()])
     album = SelectField('Select Album', coerce=int)
 
     submit = SubmitField('Update')
@@ -81,6 +81,8 @@ class AddToPlaylistForm(FlaskForm):
     playlist = SelectField('Playlist', coerce=int)
     submit = SubmitField('Add to Playlist')
 
-class AddSongToPlaylistForm(FlaskForm):
-    selected_song = SelectField('Select song', coerce=int, choices=[])
-    submit = SubmitField('Add Song to Playlist')
+
+
+class SearchForm(FlaskForm):
+    search = StringField('Search', validators=[DataRequired()])
+    submit = SubmitField('Search')
