@@ -26,6 +26,9 @@ def create_app():
 app = create_app()
 
 if __name__ == "__main__":
-    from routes import *
+    from routes.main import *
+    from routes.user import *
+    from routes.creator import *
+    from routes.admin import *
     from models import *
     app.run(debug=True)
