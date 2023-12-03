@@ -7,7 +7,7 @@ from flask_bcrypt import Bcrypt
 login_manager = LoginManager()
 bcrypt = Bcrypt()
 login_manager.login_view = 'login'
-# login_manager.login_message_category= 'info'
+login_manager.login_message_category= 'info'
 
 def create_app():
     app = Flask(__name__, template_folder="templates")
