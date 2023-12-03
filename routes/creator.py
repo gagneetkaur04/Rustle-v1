@@ -91,8 +91,10 @@ def get_album(album_id):
         return redirect(url_for('error'))
 
     album= Album.query.filter_by(id=album_id).first()
-    songs = Song.query.filter_by(album_id=album_id).all()
-
+    songs = db.session.query(User, Song)\
+        .join(Song, User.id == Song.creator_id)\
+        .order_by(Song.date_created.desc()).all()
+    
     editAlbumForm = EditAlbumForm(obj=album)
 
     if request.method == 'POST':

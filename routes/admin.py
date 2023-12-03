@@ -3,7 +3,7 @@ from flask import render_template, current_app as app, redirect, url_for, flash
 from flask_login import current_user,login_required
 from models import Song, User, Album
 from app import app
-from routes.utils import get_song_count, get_creator_count, get_user_count, get_album_count, song_charts
+from routes.utils import get_song_count, get_creator_count, get_user_count, get_album_count
 
 # >>>>>>>>>>>>>>>>>> ADMIN DASHBOARD <<<<<<<<<<<<<<<<<<<<<<< 
 @app.route("/admin", methods=['GET', 'POST'])
@@ -16,15 +16,14 @@ def admin_dashboard():
     creator_count = get_creator_count()
     user_count = get_user_count()
     album_count = get_album_count()
-    song_data = song_charts()
+    # song_data = song_charts()
 
 
     return render_template('admin.html', 
                            song_count=song_count, 
                             creator_count=creator_count, 
                             user_count=user_count, 
-                            album_count=album_count, 
-                            song_data=song_data)
+                            album_count=album_count)
 
 
 # >>>>>>>>>>>>>>>>>> ADMIN USERS <<<<<<<<<<<<<<<<<<<<<<< 

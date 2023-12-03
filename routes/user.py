@@ -99,9 +99,13 @@ def get_playlist(playlist_id):
 
     user = current_user
 
-    playlist = Playlist.query.filter_by(id=playlist_id).first()
+    playlist = db.session.query(User, Playlist)\
+        .join(Playlist, User.id == Playlist.user_id)\
+        .filter(Playlist.id == playlist_id).first()
+
+    
     edit_playlist_form = EditPlaylistForm(obj=playlist)
-    songs = playlist.songs
+    songs = playlist.Playlist.songs
 
     if edit_playlist_form.validate_on_submit():
 
@@ -149,7 +153,7 @@ def play_song(song_id):
             
         playlist_id = form.playlist.data
         playlist = Playlist.query.filter_by(id=playlist_id).first()
-        playlist.songs.append(song)
+        playlist.songs.append(song.Song)
         db.session.commit()
 
         flash('Your song have been added to the playlist!', 'success')

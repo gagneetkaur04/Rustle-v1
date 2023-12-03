@@ -333,7 +333,8 @@ input[type="search"]::placeholder {
   flex-direction: column;;
 }
 .music-page .song-lyrics{
-  max-width: 600px;
+  max-width: 500px;
+  min-width: 400px;
   width: max-content;
   overflow-y: auto;
   font-size: larger;
@@ -440,7 +441,7 @@ input[type="search"]::placeholder {
 
 .card {
   width: max-content;
-  height: 300px; /* adjust this in the creator profile html page */
+  height: fit-content; /* adjust this in the creator profile html page */
   border-radius: 8px;
   overflow: hidden;
   margin: 15px;
@@ -451,7 +452,7 @@ input[type="search"]::placeholder {
 }
 
 .card img {
-  width: fit-content; /* adjust this in the creator profile html page */
+  width: 200px; /* adjust this in the creator profile html page */
   height: -webkit-fill-available;  /* adjust this in the creator profile html page */
   object-fit: scale-down;
   transition: transform 0.5s ease;
@@ -486,13 +487,16 @@ input[type="search"]::placeholder {
 .overlay-content {
   color: white;
   text-align: center;
+  font-size: small;
 }
 
 .overlay-content .song-title {
   max-width: 200px;
 }
 
-
+.song-title{
+  font-size: 20px;
+}
 
 .song-title,
 .artist,
