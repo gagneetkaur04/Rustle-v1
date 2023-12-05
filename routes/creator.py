@@ -171,10 +171,10 @@ def delete_album(album_id):
         db.session.add(singles_album)
         db.session.commit()
 
-        for song in songs:
-            song.album_id = singles_album.id
-            db.session.commit()
-        
+    for song in songs:
+        song.album_id = singles_album.id
+        db.session.commit()
+
     db.session.delete(album)
     db.session.commit()
 
@@ -185,7 +185,7 @@ def delete_album(album_id):
 # ................................... SONGS ROUTES ......................................
 
 # Get song ---> To view the songs; EDIT SONG
-@app.route('/song/<int:song_id>', methods=['GET'])
+@app.route('/song/<int:song_id>', methods=['GET', 'POST'])
 @login_required
 def get_song(song_id):
 
@@ -205,10 +205,9 @@ def get_song(song_id):
 
     if form.validate_on_submit():
 
-        song.song_title = form.song_title.data
-        song.lyrics = form.lyrics.data
-        song.duration = form.duration.data
-        song.album_id = form.album.data
+        music.song_title = form.song_title.data
+        music.lyrics = form.lyrics.data
+        music.album_id = form.album.data
 
         db.session.commit()
 
