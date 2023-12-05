@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
 
 
 class Album(db.Model):
-    id = db.Column('album_id', db.Float, primary_key=True)
+    id = db.Column('album_id', db.Integer, primary_key=True)
     album_name = db.Column(db.String(50), nullable = False) 
     genre = db.Column(db.String(30))
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

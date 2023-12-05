@@ -20,7 +20,7 @@
                     </li>
                     <p class="song-artist">Artist : {{ song.User.username }}</p> 
                     <p class="song-artist">Album : {{ song.Album.album_name }}</p>
-                    <p>(Released on {{ song.Song.date_created.strftime('%d-%m-%Y') }})</p>
+                    <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
                 </div>
             {% endfor %}
         </ul>

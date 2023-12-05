@@ -22,17 +22,17 @@
         {% for song in songs %}
             <div class="one-song">
                 <li class="song-contents">
-                    <h3 class="song-title">{{ song.song_title }}</h3>
+                    <h3 class="song-title">{{ song.Song.song_title }}</h3>
     
-                    <a href="{{ url_for('get_song', song_id=song.id )}}">
+                    <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
                         <button class="playsong">
                             <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
                         </button>
                     </a>
                     
                 </li>
-                <p class="song-artist">Artist : {{ song.creator_id }}</p>
-                <p>(Released on {{ song.date_created.strftime('%Y-%m-%d') }})</p>
+                <p class="song-artist">Artist : {{ song.User.username }}</p>
+                <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
             </div>
         {% endfor %}
     </ul>

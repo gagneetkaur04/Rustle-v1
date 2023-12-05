@@ -32,29 +32,92 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
+
+                    
                     <div class="playlist-section">
                         <div class="playlist-details">
                             <h3 class="playlist-title">Add to Playlist</h3>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
                         </div>
                     </div>
-                    <form action="" method="POST">
-                        {{ form.hidden_tag() }}
-                        
-                        <select id="playlist" name="playlist" class="form-control">
-                            {% for id, name in playlists %}
-                                    <option value="{{ id }}">{{ name }}</option>
-                            {% endfor %}
-                        </select>
-                        <br>
+                    
+                    {% if playlist_count != 0 %}
 
-                        <div class="form-group">
-                            {{ form.submit(class='btn btn-success') }}
-                        </div>
-                    </form>
+                        <form action="" method="POST">
+                            {{ addsong_form.hidden_tag() }}
+                            
+                            <select id="playlist" name="playlist" class="form-control">
+                                {% for id, name in playlists %}
+                                        <option value="{{ id }}">{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                            <br>
+
+                            <div class="form-group">
+                                {{ addsong_form.submit(class='btn btn-success') }}
+                            </div>
+                        </form>
+
+                    {% else %}
+
+                        <h6>No Playlists Created</h6>
+                    
+                    {% endif %}
+                    
+
+                    <!-- CREATE PLAYLIST  -->
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#createPlaylistModal">
+                            Create New Playlist
+                        </button>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- CREATE PLAYLIST MODAL -->
+    <div class="modal fade" id="createPlaylistModal" tabindex="-1" aria-labelledby="createPlaylistLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+            <div class="playlist-section">
+                <div class="playlist-details">
+                <h3 class="playlist-title">Create New Playlist</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+
+            <form action="" method="POST">
+                {{ playlist_form.hidden_tag() }}
+                <!-- TITLE  -->
+                <div class="form-group">
+                {{ playlist_form.playlist_title.label(class='form-control-label') }}
+
+                {% if playlist_form.playlist_title.errors %}
+                {{ playlist_form.playlist_title(class='form-control form-control-lg is-invalid') }}
+
+                <div class="invalid-feedback">
+                    {% for error in playlist_form.playlist_title.errors %}
+                    <span> {{ error }} </span>
+                    {% endfor %}
+                </div>
+
+                {% else %}
+                {{ playlist_form.playlist_title(class='form-control form-control-lg') }}
+
+                {% endif %}
+                </div>
+                <br>
+
+                <!-- SUBMIT BUTTON  -->
+                <div class="form-group">
+                {{ playlist_form.submit(class='btn btn-success') }}
+                </div>
+
+            </form>
+            </div>
+        </div>
         </div>
     </div>
 

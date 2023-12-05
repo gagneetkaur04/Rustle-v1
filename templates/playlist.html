@@ -16,21 +16,21 @@
 
 <div class="album-songs">
     <ul class="song-list">
-        {% for song in songs %}
+        {% for song_info in songs %}
             <div class="one-song">
                 <li class="song-contents">
-                    <h3 class="song-title">{{ song.song_title }}</h3>
+                    <h3 class="song-title">{{ song_info.song.song_title }}</h3>
     
-                    <a href="{{ url_for('play_song', song_id=song.id )}}">
+                    <a href="{{ url_for('play_song', song_id=song_info.song.id )}}">
                         <button class="playsong">
                             <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
                         </button>
                     </a>
                     
                 </li>
-                <p class="song-artist">Artist : {{ song.creator_id }}</p>
-                <p class="song-artist">Album : {{ song.album_id}}</p>
-                <p>(Released on {{ song.date_created.strftime('%Y-%m-%d') }})</p>
+                <p class="song-artist">Artist : {{ song_info.artist_name}}</p>
+                <p class="song-artist">Album : {{ song_info.album_name}}</p>
+                <p>(Released on {{ song_info.song.date_created.strftime('%b %d, %Y') }})</p>
                 
             </div>
         {% endfor %}

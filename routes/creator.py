@@ -22,7 +22,16 @@ def creator_profile():
     song_form = SongForm()
 
     albums = [(album.id, album.album_name) for album in Album.query.filter_by(creator_id=user.id).all()]
-    albums.insert(0, (-1, 'Singles'))
+
+    flag = 0
+    for album in albums:
+        if album[1] == 'Singles':
+            flag = 1
+            break
+    
+    if flag == 0:
+        albums.insert(0, (-1, 'Singles'))
+
     song_form.album.choices = albums
 
     if request.method == 'GET':
@@ -44,15 +53,16 @@ def creator_profile():
             album = Album(
                 album_name=album_form.album_title.data,
                 genre=album_form.genre.data,
-                creator_id=current_user.id,
+                creator_id=user.id,
                 date_created=datetime.now()
             )
-
-            logger.info('album: %s, user: %s ', album_form.album_title.data, current_user.id)
+            
+            logger.info('album: %s, user: %s , id: %s', album_form.album_title.data, current_user.id, album.id)
             print(album)
 
             db.session.add(album)
             db.session.commit()
+            
             flash('Your album has been created!', 'success')
             return redirect(url_for('creator_profile'))
         
@@ -149,12 +159,15 @@ def delete_album(album_id):
     songs = Song.query.filter_by(album_id=album_id).all()
     singles_album = Album.query.filter_by(creator_id=current_user.id, album_name='Singles').first()
 
-    if not singles_album:
+    if not singles_album and len(songs) > 0:
         singles_album = Album(
             album_name='Singles',
             genre='Unknown', 
             creator_id=current_user.id, 
             date_created=datetime.now())
+        
+        singles_album.id = -1 - current_user.id
+
         db.session.add(singles_album)
         db.session.commit()
 

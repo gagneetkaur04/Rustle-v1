@@ -202,25 +202,7 @@
                     
                                     {% endif %}
                                 </div>
-                    
-                                <!-- DURATION  -->
-                                <div class="form-group">
-                                    {{ song_form.duration.label(class='form-control-label') }}
-                    
-                                    {% if song_form.duration.errors %}
-                                        {{ song_form.duration(class='form-control form-control-lg is-invalid') }}
-                    
-                                        <div class="invalid-feedback">
-                                            {% for error in song_form.duration.errors %}
-                                                <span> {{ error }} </span>
-                                            {% endfor %}
-                                        </div>
-                                    
-                                    {% else %}
-                                        {{ song_form.duration(class='form-control form-control-lg') }}
-                    
-                                    {% endif %}
-                                </div>
+                
 
                                 <!-- ALBUM SELECTION  -->
                                 <div class="form-group">
