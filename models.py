@@ -53,19 +53,17 @@ class Song(db.Model):
     song_title = db.Column(db.String(50), nullable = False) 
     song_path = db.Column(db.String, nullable = False) 
     lyrics = db.Column(db.String, nullable = False) 
-    duration = db.Column(db.String, nullable = False) 
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     is_flagged = db.Column(db.Boolean, nullable=False, default=False)
 
     playlists = db.relationship('Playlist', secondary='playlist_song', back_populates='songs')
 
-    def __init__(self, album_id, creator_id, song_title, song_path, lyrics, duration, date_created):
+    def __init__(self, album_id, creator_id, song_title, song_path, lyrics, date_created):
         self.album_id = album_id
         self.creator_id = creator_id
         self.song_title = song_title
         self.song_path = song_path
         self.lyrics = lyrics
-        self.duration = duration
         self.date_created = date_created
         self.is_flagged = False
 
