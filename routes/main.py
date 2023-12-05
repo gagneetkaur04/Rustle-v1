@@ -9,6 +9,15 @@ from app import bcrypt, app
 # Welcome Page Route
 @app.route("/", methods=['GET', 'POST'])
 def welcome():
+
+    if not User.query.filter_by(email=app.config['ADMIN_EMAIL']).first():
+        user = User(username=app.config['ADMIN_USERNAME'],
+                    email=app.config['ADMIN_EMAIL'],
+                    password=app.config['ADMIN_PASSWORD'])
+        user.is_admin = True
+        db.session.add(user)
+        db.session.commit()
+
     if current_user.is_authenticated:
         if not current_user.is_admin:
             return redirect(url_for('home_user'))
@@ -33,9 +42,6 @@ def register():
                     email=form.email.data, 
                     password=hashed_password)
         
-        if form.email.data == app.config['ADMIN_USERNAME'] and form.password.data == app.config['ADMIN_PASSWORD']:
-            user.is_admin = True
-
         db.session.add(user)
         db.session.commit()
 
@@ -56,7 +62,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
-        if form.email.data == app.config['ADMIN_USERNAME'] and form.password.data == app.config['ADMIN_PASSWORD']:
+        if form.email.data == app.config['ADMIN_EMAIL'] and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             return redirect(url_for('admin_dashboard'))
 
