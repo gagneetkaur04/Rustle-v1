@@ -5,7 +5,6 @@ from models import Song, Playlist, Album, User
 from forms import PlaylistForm, EditPlaylistForm, AddToPlaylistForm
 from app import app
 from routes.utils import logger
-from sqlalchemy.orm import joinedload
 
 
 # User Home Page
@@ -16,13 +15,13 @@ def home_user():
     user = current_user
     latest_songs = db.session.query(User, Song, Album)\
         .join(Song, User.id == Song.creator_id)\
-        .join(Album, User.id == Album.creator_id)\
+        .join(Album, Song.album_id == Album.id)\
         .order_by(Song.date_created.desc()).limit(5).all()
 
     return render_template('home_user.html', user=user, latest_songs=latest_songs)
 
 
-# ALL SONGS
+# All Songs
 @app.route('/all_songs', methods=['GET', 'POST'])
 @login_required
 def all_songs():
@@ -33,13 +32,13 @@ def all_songs():
     return render_template('admin_songs.html', user=user, songs=songs)
 
 
-# ALL ALBUMS
+# All Albums
 @app.route('/all_albums', methods=['GET', 'POST'])
 @login_required
 def all_albums():
 
     user = current_user
-    albums = Album.query.all()
+    albums = Album.query.filter(Album.album_name!='Singles').all()
 
     return render_template('admin_albums.html', user=user, albums=albums)
 
@@ -56,6 +55,53 @@ def become_artist():
 
     flash('You are now a creator!', 'success')
     return redirect(url_for('creator_profile'))
+
+
+# PLAY A SONG AND ADD TO PLAYLIST
+@app.route('/play_song/<int:song_id>', methods=['GET', 'POST'])
+@login_required
+def play_song(song_id):
+
+    song = db.session.query(User, Song)\
+        .join(Song, User.id == Song.creator_id)\
+            .filter(Song.id == song_id).first()
+    
+    playlists = Playlist.query.filter_by(user_id=current_user.id).all()
+    playlist_count = len(playlists)
+
+    playlist_form = PlaylistForm()
+
+    addsong_form=AddToPlaylistForm()
+    playlist_choices = [(playlist.id, playlist.playlist_title) for playlist in Playlist.query.filter_by(user_id=current_user.id).all()]
+    addsong_form.playlist.choices = playlist_choices
+
+    if addsong_form.validate_on_submit():
+            
+        playlist_id = addsong_form.playlist.data
+        playlist = Playlist.query.filter_by(id=playlist_id).first()
+        playlist.songs.append(song.Song)
+        db.session.commit()
+
+        flash('Your song have been added to the playlist!', 'success')
+        return redirect(url_for('play_song', song_id=song_id))
+
+    elif playlist_form.validate_on_submit():
+
+        playlist = Playlist(playlist_title=playlist_form.playlist_title.data, user_id=current_user.id)
+        playlist.songs.append(song.Song)
+        db.session.add(playlist)
+        db.session.commit()
+
+        flash('Your playlist has been created and song added to it!', 'success')
+        return redirect(url_for('play_song', song_id=song_id))
+    
+
+    return render_template('play_song.html', 
+                           song=song, 
+                           addsong_form=addsong_form,
+                           playlist_form=playlist_form,
+                           playlists=addsong_form.playlist.choices, 
+                           playlist_count=playlist_count)
 
 
 
@@ -99,13 +145,16 @@ def get_playlist(playlist_id):
 
     user = current_user
 
-    playlist = db.session.query(User, Playlist)\
-        .join(Playlist, User.id == Playlist.user_id)\
-        .filter(Playlist.id == playlist_id).first()
+    playlist = Playlist.query.get_or_404(playlist_id)
 
-    
     edit_playlist_form = EditPlaylistForm(obj=playlist)
-    songs = playlist.Playlist.songs
+    songs = playlist.songs
+
+    song_info = []
+    for song in songs:
+        artist_name = User.query.get(song.creator_id).username
+        album_name = Album.query.get(song.album_id).album_name
+        song_info.append({'song': song, 'artist_name': artist_name, 'album_name': album_name})
 
     if edit_playlist_form.validate_on_submit():
 
@@ -116,10 +165,9 @@ def get_playlist(playlist_id):
         return redirect(url_for('get_playlist', playlist_id=playlist_id))
 
 
-
     return render_template('playlist.html', user=user, 
                                             playlist=playlist, 
-                                            songs=songs, 
+                                            songs=song_info, 
                                             edit_playlist_form=edit_playlist_form)
 
 
@@ -134,29 +182,3 @@ def delete_playlist(playlist_id):
     
         flash('Your playlist has been deleted!', 'success')
         return redirect(url_for('user_profile'))
-
-
-# PLAY A SONG AND ADD TO PLAYLIST
-@app.route('/play_song/<int:song_id>', methods=['GET', 'POST'])
-@login_required
-def play_song(song_id):
-
-    song = db.session.query(User, Song)\
-        .join(Song, User.id == Song.creator_id)\
-            .filter(Song.id == song_id).first()
-
-    form=AddToPlaylistForm()
-    playlist_choices = [(playlist.id, playlist.playlist_title) for playlist in Playlist.query.filter_by(user_id=current_user.id).all()]
-    form.playlist.choices = playlist_choices
-
-    if form.validate_on_submit():
-            
-        playlist_id = form.playlist.data
-        playlist = Playlist.query.filter_by(id=playlist_id).first()
-        playlist.songs.append(song.Song)
-        db.session.commit()
-
-        flash('Your song have been added to the playlist!', 'success')
-        return redirect(url_for('play_song', song_id=song_id))
-
-    return render_template('play_song.html', song=song, form=form, playlists=form.playlist.choices)

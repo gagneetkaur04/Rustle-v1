@@ -4,6 +4,7 @@ from app import login_manager, app
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+from werkzeug.routing import BaseConverter
 
 # FOR DEBUGGING PURPOSES
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -14,6 +15,13 @@ logger = logging.getLogger(__name__)
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+class NegativeFloatConverter(BaseConverter):
+    def to_python(self, value):
+        return float(value)
+
+    def to_url(self, value):
+        return str(value)
 
 def save_audio(form_audio):
     random_hex = secrets.token_hex(8)

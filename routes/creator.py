@@ -5,10 +5,11 @@ from flask_login import current_user,login_required
 from models import Song, Album
 from forms import *
 from app import app
-from routes.utils import save_audio, logger, delete_audio 
+from routes.utils import save_audio, logger, delete_audio , NegativeFloatConverter
 
+app.url_map.converters['negfloat'] = NegativeFloatConverter
 
-# Creator Profile ; Add Album ;  Add Song
+# Creator Profile ; Add Album ;  Add Song 
 @app.route('/creator', methods=['GET', 'POST'])
 @login_required
 def creator_profile():
@@ -60,16 +61,41 @@ def creator_profile():
             if song_form.audio_file.data:
                 audio_path = save_audio(song_form.audio_file.data)
 
-            song = Song(album_id=song_form.album.data,
+            if song_form.album.data == -1:
+
+                album = Album.query.filter_by(creator_id=current_user.id, album_name='Singles').first()
+
+                if not album:
+                    album = Album(
+                            album_name='Singles',
+                            genre='Unknown', 
+                            creator_id=current_user.id, 
+                            date_created=datetime.now())
+                    
+                    album.id = song_form.album.data - current_user.id
+                    db.session.add(album)
+                    db.session.commit()
+
+                song = Song(album_id=song_form.album.data-current_user.id,
                         creator_id=current_user.id,
                         song_title=song_form.song_title.data,
                         song_path=audio_path,
                         lyrics=song_form.lyrics.data,
-                        duration=song_form.duration.data,
                         date_created=datetime.now())
-            
-            db.session.add(song)
-            db.session.commit()
+
+                db.session.add(song)
+                db.session.commit()
+                
+            else:
+                song = Song(album_id=song_form.album.data,
+                            creator_id=current_user.id,
+                            song_title=song_form.song_title.data,
+                            song_path=audio_path,
+                            lyrics=song_form.lyrics.data,
+                            date_created=datetime.now())
+                
+                db.session.add(song)
+                db.session.commit()
 
             logger.info('song: %s, user: %s ', song_form.song_title.data, current_user.id)
 
@@ -83,16 +109,15 @@ def creator_profile():
 # ................................... ALBUMS ROUTES ......................................
 
 # Get album ---> To view the songs in the album ; Edit Album
-@app.route('/album/<int:album_id>', methods=['GET', 'POST'])
+@app.route('/album/<negfloat:album_id>', methods=['GET', 'POST'])
 @login_required
 def get_album(album_id):
 
-    if not current_user.is_creator:
-        return redirect(url_for('error'))
-
     album= Album.query.filter_by(id=album_id).first()
+
     songs = db.session.query(User, Song)\
         .join(Song, User.id == Song.creator_id)\
+        .filter(Song.album_id == album_id)\
         .order_by(Song.date_created.desc()).all()
     
     editAlbumForm = EditAlbumForm(obj=album)
@@ -121,6 +146,22 @@ def delete_album(album_id):
         return redirect(url_for('error'))
         
     album = Album.query.filter_by(id=album_id).first()
+    songs = Song.query.filter_by(album_id=album_id).all()
+    singles_album = Album.query.filter_by(creator_id=current_user.id, album_name='Singles').first()
+
+    if not singles_album:
+        singles_album = Album(
+            album_name='Singles',
+            genre='Unknown', 
+            creator_id=current_user.id, 
+            date_created=datetime.now())
+        db.session.add(singles_album)
+        db.session.commit()
+
+        for song in songs:
+            song.album_id = singles_album.id
+            db.session.commit()
+        
     db.session.delete(album)
     db.session.commit()
 
@@ -138,14 +179,15 @@ def get_song(song_id):
     if not current_user.is_creator:
         return redirect(url_for('error'))
     
+    music = Song.query.filter_by(id=song_id).first()
+    
     song = db.session.query(User, Song)\
         .join(Song, User.id == Song.creator_id)\
             .filter(Song.id == song_id).first()
 
-    form = EditSongForm(obj=song)
+    form = EditSongForm(obj=music)
 
     albums = [(album.id, album.album_name) for album in Album.query.filter_by(creator_id=current_user.id).all()]
-    albums.insert(0, (-1, 'Singles'))
     form.album.choices = albums
 
     if form.validate_on_submit():

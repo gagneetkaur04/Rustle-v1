@@ -55,7 +55,6 @@ class EditAlbumForm(FlaskForm):
 class SongForm(FlaskForm):
     song_title = StringField('Song Title', validators=[DataRequired()])
     lyrics = TextAreaField('Lyrics', validators=[DataRequired()])
-    duration = StringField('Song Duration', validators=[DataRequired()])
     album = SelectField('Select Album', coerce=int)
     audio_file = FileField('Audio File', validators=[DataRequired()])
 
@@ -71,7 +70,6 @@ class SongForm(FlaskForm):
 class EditSongForm(FlaskForm):
     song_title = StringField('Song Title', validators=[DataRequired()])
     lyrics = TextAreaField('Lyrics', validators=[DataRequired()])
-    duration = StringField('Song Duration', validators=[DataRequired()])
     album = SelectField('Select Album', coerce=int)
 
     submit = SubmitField('Update')
