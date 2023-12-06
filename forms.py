@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from models import User
-from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAreaField, FileField, HiddenField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms import StringField, PasswordField, SubmitField, SelectField, TextAreaField, FileField, RadioField
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -84,3 +84,7 @@ class AddToPlaylistForm(FlaskForm):
 class SearchForm(FlaskForm):
     search = StringField('Search', validators=[DataRequired()])
     submit = SubmitField('Search')
+
+
+class RatingForm(FlaskForm):
+    submit = SubmitField('Rate')

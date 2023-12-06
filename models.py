@@ -84,8 +84,8 @@ class Playlist_Song(db.Model):
 
 class Rating(db.Model):
     __tablename__ = 'ratings'
-    user_id = db.Column(db.Integer,db.ForeignKey('user.user_id', ondelete="CASCADE"),primary_key=True)
-    song_id = db.Column(db.Integer,db.ForeignKey('song.song_id', ondelete="CASCADE"),primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.user_id'),primary_key=True)
+    song_id = db.Column(db.Integer,db.ForeignKey('song.song_id'),primary_key=True)
     rating = db.Column(db.Integer)
 
     def __init__(self, user_id, song_id, rating):
