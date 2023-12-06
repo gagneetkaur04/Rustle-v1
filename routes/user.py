@@ -1,8 +1,8 @@
 from database import db
 from flask import render_template, request, current_app as app, redirect, url_for, flash
 from flask_login import current_user,login_required
-from models import Song, Playlist, Album, User
-from forms import PlaylistForm, EditPlaylistForm, AddToPlaylistForm
+from models import Song, Playlist, Album, User, Rating
+from forms import PlaylistForm, EditPlaylistForm, AddToPlaylistForm, RatingForm
 from app import app
 from routes.utils import logger
 
@@ -75,6 +75,9 @@ def play_song(song_id):
     playlist_choices = [(playlist.id, playlist.playlist_title) for playlist in Playlist.query.filter_by(user_id=current_user.id).all()]
     addsong_form.playlist.choices = playlist_choices
 
+    rating_form = RatingForm()
+    user_rating = Rating.query.filter_by(user_id=current_user.id, song_id=song_id).first()
+
     if addsong_form.validate_on_submit():
             
         playlist_id = addsong_form.playlist.data
@@ -94,14 +97,29 @@ def play_song(song_id):
 
         flash('Your playlist has been created and song added to it!', 'success')
         return redirect(url_for('play_song', song_id=song_id))
-    
+
+    elif rating_form.validate_on_submit():
+        rating = int(request.form['rating'])
+
+        if user_rating:
+            user_rating.rating = rating
+        else:
+            user_rating = Rating(user_id=current_user.id, song_id=song_id, rating=rating)
+            db.session.add(user_rating)
+
+        db.session.commit()
+        flash('Your rating has been recorded!', 'success')
+        return redirect(url_for('play_song', song_id=song_id)) 
+
 
     return render_template('play_song.html', 
                            song=song, 
                            addsong_form=addsong_form,
                            playlist_form=playlist_form,
+                           rating_form=rating_form,
                            playlists=addsong_form.playlist.choices, 
-                           playlist_count=playlist_count)
+                           playlist_count=playlist_count,
+                           user_rating=user_rating)
 
 
 

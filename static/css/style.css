@@ -676,7 +676,43 @@ body::-webkit-scrollbar-thumb:hover {
 	border-radius: 8px 8px 0 0;
 }
 
-/* ADMIN PAGE  */
+
+/* RATING  */
+
+.rating_song{
+  margin-top: 20px;
+}
+
+.star-rating {
+  unicode-bidi:bidi-override;
+  color: #86601c;
+  font-size: 25px;
+  display: inline-block;
+  overflow: hidden;
+}
+.star-rating span {
+  padding: 5px;
+  cursor: pointer;
+  display: block;
+  float: right;
+}
+.star-rating input {
+  display: none;
+}
+.star-rating label {
+  float: right;
+  color: #ccc;
+}
+.star-rating input:checked ~ label {
+  color: #ffc700;    
+}
+
+.star:hover,
+.star:hover ~ .star {
+  color: #ffd700;
+}
+
+/* --------------------------ADMIN PAGE--------------------------------  */
 
 .admin-creator-page .title-button{
   display: flex;
