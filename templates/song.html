@@ -2,43 +2,52 @@
 
 {% block main %}
 
-    <div class="music-page">
-        <div class="song-details">
-        <music-card
-            artist="{{ song.User.username }}"
-            title="{{ song.Song.song_title }}"
-            image="{{ url_for('static', filename='images/' + 'default_song.jpg') }}"
-            audio="{{ url_for('static', filename='audios/' + song.Song.song_path) }}">
-            <music-card>
+    {% if user.is_blacklisted and current_user.id==song.Song.creator_id %}
+        <div class="alert alert-danger" role="alert">
+            You are blacklisted. You cannot view this song.
         </div>
 
-        <div class="lyrics">
-            <h4 class="heading">Lyrics</h4>
-            <div class="song-lyrics">
-                <pre>{{ song.Song.lyrics }}</pre>
+    {% else%}
+
+        <div class="music-page">
+            <div class="song-details">
+            <music-card
+                artist="{{ song.User.username }}"
+                title="{{ song.Song.song_title }}"
+                image="{{ url_for('static', filename='images/' + 'default_song.jpg') }}"
+                audio="{{ url_for('static', filename='audios/' + song.Song.song_path) }}">
+                <music-card>
             </div>
-        </div>
-        
-        {% if current_user.is_creator and current_user.id==song.Song.creator_id %}
-            <div class="buttons mx-5">
-                <h4  class="mb-4">
-                    Creator Controls
-                </h4>
 
-                <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editSongModal">
-                    Edit Song
-                </button>
-
-                <br>
-                <br>
+            <div class="lyrics">
+                <h4 class="heading">Lyrics</h4>
+                <div class="song-lyrics">
+                    <pre>{{ song.Song.lyrics }}</pre>
+                </div>
+            </div>
             
-                <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteSongModal">
-                    Delete Song
-                </button>
+            {% if current_user.is_creator and current_user.id==song.Song.creator_id %}
+                <div class="buttons mx-5">
+                    <h4  class="mb-4">
+                        Creator Controls
+                    </h4>
 
-            </div>
-        {% endif %}
-    </div>
+                    <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editSongModal">
+                        Edit Song
+                    </button>
+
+                    <br>
+                    <br>
+                
+                    <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteSongModal">
+                        Delete Song
+                    </button>
+
+                </div>
+            {% endif %}
+        </div>
+    
+    {% endif %}
 
     <!-- ----------------------------------------------------MODALS-------------------------------------------------------------  -->
 

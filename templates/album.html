@@ -2,44 +2,51 @@
 
 {% block main %}
 
-<div class="admin-album-page ">
-    <h1 class="text-light">{{ album.album_name }}</h1>
+    {% if current_user.is_blacklisted and current_user.id==album.creator_id  %}
 
-    {% if current_user.is_creator and current_user.id==album.creator_id %}
-        <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
-            Edit Album
-        </button>
+        <div class="alert alert-danger" role="alert">
+            You are blacklisted. You cannot view this album.
+        </div>
 
-        <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
-            Delete Album
-        </button>
+    {% else%}
+
+        <div class="admin-album-page ">
+            <h1 class="text-light">{{ album.album_name }}</h1>
+
+            {% if current_user.is_creator and current_user.id==album.creator_id %}
+                <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
+                    Edit Album
+                </button>
+
+                <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
+                    Delete Album
+                </button>
+            {% endif %}
+
+        </div>
+
+        <div class="album-songs">
+            <ul class="song-list">
+                {% for song in songs %}
+                    <div class="one-song">
+                        <li class="song-contents">
+                            <h3 class="song-title">{{ song.Song.song_title }}</h3>
+            
+                            <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
+                                <button class="playsong">
+                                    <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
+                                </button>
+                            </a>
+                            
+                        </li>
+                        <p class="song-artist">Artist : {{ song.User.username }}</p>
+                        <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+
     {% endif %}
-
-</div>
-
-<div class="album-songs">
-    <ul class="song-list">
-        {% for song in songs %}
-            <div class="one-song">
-                <li class="song-contents">
-                    <h3 class="song-title">{{ song.Song.song_title }}</h3>
-    
-                    <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
-                        <button class="playsong">
-                            <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
-                        </button>
-                    </a>
-                    
-                </li>
-                <p class="song-artist">Artist : {{ song.User.username }}</p>
-                <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
-            </div>
-        {% endfor %}
-    </ul>
-</div>
-
-
-
 
 
     <!-- ----------------------------------------------------MODALS-------------------------------------------------------------  -->

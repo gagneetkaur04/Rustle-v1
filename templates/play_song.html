@@ -2,60 +2,69 @@
 
 {% block main %}
 
-    <div class="music-page">
-        <div class="song-details">
-        <music-card
-            artist="{{ song.User.username }}"
-            title="{{ song.Song.song_title }}"
-            image="{{ url_for('static', filename='images/' + 'default_song.jpg') }}"
-            audio="{{ url_for('static', filename='audios/' + song.Song.song_path) }}">
-            <music-card>
+
+    {% if song.User.is_blacklisted %}
+        <div class="alert alert-danger" role="alert">
+            The Artist of this song has been blacklisted. You cannot view this song.
         </div>
-        <div class="lyrics">
-            <h4 class="heading">Lyrics</h4>
-            <div class="song-lyrics">
-                <pre>{{ song.Song.lyrics }}</pre>
+
+    {% else%}
+
+        <div class="music-page">
+            <div class="song-details">
+            <music-card
+                artist="{{ song.User.username }}"
+                title="{{ song.Song.song_title }}"
+                image="{{ url_for('static', filename='images/' + 'default_song.jpg') }}"
+                audio="{{ url_for('static', filename='audios/' + song.Song.song_path) }}">
+                <music-card>
             </div>
-        </div>
-        <div class="buttons mx-5">
-            <h4  class="mb-4">
-                User Controls
-            </h4>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addToPlaylistModal">Add to Playlist</button>
-            
-            <br>
-            <div class="rating_song">
-                Rate the song
+            <div class="lyrics">
+                <h4 class="heading">Lyrics</h4>
+                <div class="song-lyrics">
+                    <pre>{{ song.Song.lyrics }}</pre>
+                </div>
+            </div>
+            <div class="buttons mx-5">
+                <h4  class="mb-4">
+                    User Controls
+                </h4>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addToPlaylistModal">Add to Playlist</button>
+                
                 <br>
+                <div class="rating_song">
+                    Rate the song
+                    <br>
 
-                <form action="" method="POST">
-                    {{ rating_form.hidden_tag() }}
-                    <!-- RATE THE SONG  -->
-                    <div class="star-rating">
-                        <input type="radio" id="star5" name="rating" value="5" {% if user_rating and user_rating.rating == 5 %} checked {% endif %} />
-                        <label class="star" for="star5" title="5 stars">&#9733;</label>
+                    <form action="" method="POST">
+                        {{ rating_form.hidden_tag() }}
+                        <!-- RATE THE SONG  -->
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" {% if user_rating and user_rating.rating == 5 %} checked {% endif %} />
+                            <label class="star" for="star5" title="5 stars">&#9733;</label>
 
-                        <input type="radio" id="star4" name="rating" value="4" {% if user_rating and user_rating.rating == 4 %} checked {% endif %} />
-                        <label class="star" for="star4" title="4 stars">&#9733;</label>
+                            <input type="radio" id="star4" name="rating" value="4" {% if user_rating and user_rating.rating == 4 %} checked {% endif %} />
+                            <label class="star" for="star4" title="4 stars">&#9733;</label>
 
-                        <input type="radio" id="star3" name="rating" value="3" {% if user_rating and user_rating.rating == 3 %} checked {% endif %} />
-                        <label class="star" for="star3" title="3 stars">&#9733;</label>
+                            <input type="radio" id="star3" name="rating" value="3" {% if user_rating and user_rating.rating == 3 %} checked {% endif %} />
+                            <label class="star" for="star3" title="3 stars">&#9733;</label>
 
-                        <input type="radio" id="star2" name="rating" value="2" {% if user_rating and user_rating.rating == 2 %} checked {% endif %} />
-                        <label class="star" for="star2" title="2 stars">&#9733;</label>
+                            <input type="radio" id="star2" name="rating" value="2" {% if user_rating and user_rating.rating == 2 %} checked {% endif %} />
+                            <label class="star" for="star2" title="2 stars">&#9733;</label>
 
-                        <input type="radio" id="star1" name="rating" value="1" {% if user_rating and user_rating.rating == 1 %} checked {% endif %} />
-                        <label class="star" for="star1" title="1 star">&#9733;</label>
-                    </div>
+                            <input type="radio" id="star1" name="rating" value="1" {% if user_rating and user_rating.rating == 1 %} checked {% endif %} />
+                            <label class="star" for="star1" title="1 star">&#9733;</label>
+                        </div>
 
-                    <div class="form-group">
-                        {{ rating_form.submit(class='btn btn-primary') }}
-                    </div>
-                </form>
+                        <div class="form-group">
+                            {{ rating_form.submit(class='btn btn-primary') }}
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-
+    
+    {% endif %}
 
 
     <!-- ADD TO PLAYLIST MODAL  -->
