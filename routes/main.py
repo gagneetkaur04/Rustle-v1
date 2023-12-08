@@ -1,7 +1,7 @@
 from database import db
 from flask import render_template, request, current_app as app, redirect, url_for, flash
 from flask_login import current_user, login_user, logout_user, login_required
-from models import User
+from models import User, Song, Album, Rating
 from forms import RegistrationForm, LoginForm
 from app import bcrypt, app
 
@@ -88,7 +88,26 @@ def logout():
 @app.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
-    pass
+    
+    query = request.args.get('q')
+
+    # Search for songs
+    songs = Song.query.join(User)\
+             .filter(Song.song_title.ilike(f'%{query}%') | User.username.ilike(f'%{query}%'))\
+             .all()
+    
+    # Search for albums
+    albums = Album.query.join(User)\
+             .filter(Album.album_name.ilike(f'%{query}%') | User.username.ilike(f'%{query}%'))\
+             .all()
+    
+    album_size = len(albums)
+
+    # Format the results
+    song_results = [{'id': song.id, 'title': song.song_title, 'artist': User.query.get(song.creator_id).username} for song in songs]
+    album_results = [{'id': album.id, 'name': album.album_name, 'genre': album.genre, 'artist': User.query.get(album.creator_id).username} for album in albums]
+
+    return render_template('search.html', query=query, songs=song_results, albums=album_results, album_size=album_size)
 
 
 # Error Page

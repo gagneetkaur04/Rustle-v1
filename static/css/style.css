@@ -893,3 +893,35 @@ body::-webkit-scrollbar-thumb:hover {
   flex-direction: row;
   margin-top: 20px;
 }
+
+
+/* --------------------------SEARCH--------------------------------  */
+
+.search-results {
+  margin-top: 30px;
+}
+
+.song {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f2f2f279;
+  border-radius: 5px;
+  max-width: 500px;
+}
+
+#song-results{
+  margin-bottom: 50px;
+}
+
+.search-a{
+  text-decoration: none;
+  color: #000000;
+}
+
+.album {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f2f2f279;
+  border-radius: 5px;
+  max-width: 500px;
+}

@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+    <div class="admin-creator-page ">
+
+        <h1>Search Results for <u>"{{ query }}"</u></h1>
+
+        <div class="search-results">
+            <h2>Songs</h2>
+            <div id="song-results">
+                {% if songs %}
+                    {% for song in songs %}
+                        <div class="song">
+                            <strong><a href="/play_song/{{ song.id }}" class="search-a">{{ song.title }}</a></strong> by {{ song.artist }}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No songs found</p>
+                {% endif %}
+            </div>
+            
+            <h2>Albums</h2>
+            <div id="album-results">
+                {% if albums %}
+                    {% for album in albums %}
+                        {% if not album.name == "Singles" %} 
+                            <div class="album">
+                                <strong><a href="/album/{{ album.id }}" class="search-a">{{ album.name }}</a></strong> by {{ album.artist }} (Genre:{{ album.genre }}) 
+                            </div>
+                        {% elif album.name == "Singles" and album_size==1 %}
+                            <p>No albums found</p>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>No albums found</p>
+                {% endif %}
+            </div>
+        </div>
+    
+    </div>
+
+{% endblock %}

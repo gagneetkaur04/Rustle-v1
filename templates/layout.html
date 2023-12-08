@@ -55,8 +55,13 @@
               <div class="container-fluid">
                 <div class="d-flex">
                   <div class="flex-grow-1 ">
-                    <form class="w-50 mx-auto" role="search">
-                      <input type="search" class="form-control search-box" placeholder="Search" aria-label="Search">
+                    <form class="w-50 mx-auto" role="search" method="GET" action="/search">
+                      <div class="input-group">
+                        <input type="search" class="form-control search-box" placeholder="Search" aria-label="Search" name="q">
+                        <div class="input-append">
+                          <button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i></button>
+                        </div>
+                      </div>
                     </form>
                   </div>
                   <div class="flex-shrink-0 dropdown">
