@@ -8,33 +8,39 @@
             <p>Total Songs: {{ song_count }}</p>
         {% endif %}
 
+
         <div class="card-container">
             {% if song_count == 0 %}
                 <h6 class="ms-3">No Songs Created</h6>
             {% else %}
                 {% for song in songs %}
-                    <div class="mb-5 admin-cards">
 
-                        {% if current_user.is_admin %}                            
-                        <a href="{{ url_for('admin_song', song_id=song.id) }}" class="card">
-                        {% else %}
-                        <a href="{{ url_for('play_song', song_id=song.id) }}" class="card">
-                        {% endif %}
+                    {% if not song.User.is_blacklisted %}
 
-                            {% if song.is_flagged %}
-                                <img src="/static/images/flagged_song.png" alt="Song {{ song.song_id}} ">
+                        <div class="mb-5 admin-cards">
+
+                            {% if current_user.is_admin %}                            
+                            <a href="{{ url_for('admin_song', song_id=song.Song.id) }}" class="card">
                             {% else %}
-                                <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
+                            <a href="{{ url_for('play_song', song_id=song.Song.id) }}" class="card">
                             {% endif %}
 
-                            <div class="overlay">
-                                <div class="overlay-content">
-                                    <h3 class="song-title">{{ song.song_title }}</h3>
+                                {% if song.Song.is_flagged %}
+                                    <img src="/static/images/flagged_song.png" alt="Song {{ song.song_id}} ">
+                                {% else %}
+                                    <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
+                                {% endif %}
+
+                                <div class="overlay">
+                                    <div class="overlay-content">
+                                        <h3 class="song-title">{{ song.Song.song_title }}</h3>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                        <h4 class="song-title mx-auto" style="width: max-content;">{{ song.song_title }}</h4>             
-                    </div>
+                            </a>
+                            <h4 class="song-title mx-auto" style="width: max-content;">{{ song.Song.song_title }}</h4>             
+                        </div>
+                        
+                    {% endif %}
                 {% endfor %}
             {% endif %}
         </div>

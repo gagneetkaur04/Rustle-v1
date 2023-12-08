@@ -27,7 +27,8 @@ def home_user():
 def all_songs():
 
     user = current_user
-    songs = Song.query.all()
+    songs = db.session.query(User, Song)\
+        .join(Song, User.id == Song.creator_id).all()
 
     return render_template('admin_songs.html', user=user, songs=songs)
 

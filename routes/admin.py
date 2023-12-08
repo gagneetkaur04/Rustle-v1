@@ -1,7 +1,7 @@
 from database import db
 from flask import render_template, current_app as app, redirect, url_for, flash
 from flask_login import current_user,login_required
-from models import Song, User, Album
+from models import Song, User, Album, Rating
 from app import app
 from routes.utils import get_song_count, get_creator_count, get_user_count, get_album_count
 
@@ -145,7 +145,9 @@ def admin_songs():
         return redirect(url_for('error'))
     
     song_count = get_song_count()
-    songs = Song.query.all()
+    songs = db.session.query(User, Song)\
+        .join(Song, User.id == Song.creator_id).all()
+
     return render_template('admin_songs.html', songs=songs, song_count=song_count)
 
 
