@@ -63,6 +63,8 @@ def become_artist():
 @login_required
 def play_song(song_id):
 
+    music = Song.query.get_or_404(song_id)
+
     song = db.session.query(User, Song)\
         .join(Song, User.id == Song.creator_id)\
             .filter(Song.id == song_id).first()
@@ -83,7 +85,7 @@ def play_song(song_id):
             
         playlist_id = addsong_form.playlist.data
         playlist = Playlist.query.filter_by(id=playlist_id).first()
-        playlist.songs.append(song.Song)
+        playlist.songs.append(music)
         db.session.commit()
 
         flash('Your song have been added to the playlist!', 'success')
@@ -92,7 +94,7 @@ def play_song(song_id):
     elif playlist_form.validate_on_submit():
 
         playlist = Playlist(playlist_title=playlist_form.playlist_title.data, user_id=current_user.id)
-        playlist.songs.append(song.Song)
+        playlist.songs.append(music)
         db.session.add(playlist)
         db.session.commit()
 
@@ -195,7 +197,7 @@ def get_playlist(playlist_id):
 @login_required
 def delete_playlist(playlist_id):
     
-        playlist = Playlist.query.filter_by(id=playlist_id).first()
+        playlist = Playlist.query.get_or_404(playlist_id)
         db.session.delete(playlist)
         db.session.commit()
     

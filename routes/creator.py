@@ -123,7 +123,7 @@ def creator_profile():
 @login_required
 def get_album(album_id):
 
-    album= Album.query.filter_by(id=album_id).first()
+    album= Album.query.get_or_404(album_id)
 
     songs = db.session.query(User, Song)\
         .join(Song, User.id == Song.creator_id)\
@@ -155,7 +155,7 @@ def delete_album(album_id):
     if not current_user.is_creator:
         return redirect(url_for('error'))
         
-    album = Album.query.filter_by(id=album_id).first()
+    album = Album.query.get_or_404(album_id)
     songs = Song.query.filter_by(album_id=album_id).all()
     singles_album = Album.query.filter_by(creator_id=current_user.id, album_name='Singles').first()
 
@@ -192,7 +192,7 @@ def get_song(song_id):
     if not current_user.is_creator:
         return redirect(url_for('error'))
     
-    music = Song.query.filter_by(id=song_id).first()
+    music = Song.query.get_or_404(song_id)
     
     song = db.session.query(User, Song)\
         .join(Song, User.id == Song.creator_id)\
@@ -224,7 +224,7 @@ def delete_song(song_id):
     if not current_user.is_creator:
         return redirect(url_for('error'))
         
-    song = Song.query.filter_by(id=song_id).first()
+    song = Song.query.get_or_404(song_id)
     delete_audio(song.song_path)
 
     db.session.delete(song)
