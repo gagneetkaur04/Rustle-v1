@@ -451,7 +451,7 @@ input[type="search"]::placeholder {
 
 .card {
   width: max-content;
-  height: fit-content; /* adjust this in the creator profile html page */
+  height: fit-content; 
   border-radius: 8px;
   overflow: hidden;
   margin: 15px;
@@ -907,6 +907,7 @@ body::-webkit-scrollbar-thumb:hover {
   display: flex;
   flex-direction: row;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 
@@ -920,6 +921,11 @@ body::-webkit-scrollbar-thumb:hover {
   margin: 4px 2px;
   border-radius: 8px;
   font-weight: bold;
+}
+
+.card-title{
+  font-size: 24px;
+  margin-bottom: 30px;
 }
 
 /* --------------------------SEARCH--------------------------------  */

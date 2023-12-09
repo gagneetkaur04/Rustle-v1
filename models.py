@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     is_creator = db.Column(db.Boolean, nullable=False, default=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
     is_blacklisted = db.Column(db.Boolean, nullable=False, default=False)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __init__(self, username, email, password):
         self.username = username

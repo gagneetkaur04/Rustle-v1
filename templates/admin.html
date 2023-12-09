@@ -5,20 +5,44 @@
         <h1>Admin Dashboard</h1>
         <div class="counts">
     
-            <p class="count">Total Songs: {{ song_count }}</p>
-            <p class="count">Total Artists: {{ creator_count }}</p>
-            <p class="count">Total Users: {{ user_count }}</p>
-            <p class="count">Total Albums: {{ album_count }}</p>
+            <p class="count">Total Songs: {{ num_songs }}</p>
+            <p class="count">Total Artists: {{ num_creators }}</p>
+            <p class="count">Total Users: {{ num_users }}</p>
+            <p class="count">Total Albums: {{ num_albums}}</p>
+            <p class="count">Average Song Rating: {{ avg_rating }}</p>
     
         </div>
     
-        <h3 class="ms-2">Charts</h3>
         <div class="charts">
-
-            <div>
-                <!-- Embedded user statistics plot -->
-                <img src="data:image/png;base64,{{ song_data }}" alt="Song Statistics" class="stat-img">
+        
+            <div class="card mt-4" style="height: max-content; width: max-content; padding: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title">User Growth Over Time</h5>
+                    <img src="{{ user_growth_chart }}" alt="User Growth Chart" class="img-fluid" style="height: max-content; width: 500px;">
+                </div>
             </div>
+
+            <div class="card mt-4" style="height: max-content; width: max-content; padding: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title">Song Performance</h5>
+                    <img src="{{ song_performance_chart }}" alt="Song Performance Chart" class="img-fluid" style="height: max-content; width: 500px;">
+                </div>
+            </div>
+
+            <div class="card mt-4" style="height: max-content; width: max-content; padding: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title">Top Artists</h5>
+                    <img src="{{ top_artists_chart }}" alt="Top Artists Chart" class="img-fluid" style="height: 400px; width: 500px;">
+                </div>
+            </div>
+
+            <div class="card mt-4" style="height: max-content; width: max-content; padding: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title">Distribution of Songs Among Artists</h5>
+                    <img src="{{ artist_song_ratio_chart }}" alt="Artist-to-Song Ratio Chart" class="img-fluid" style="height: 400px; width: 500px;">
+                </div>
+            </div>
+
         </div>
 
     </div>
