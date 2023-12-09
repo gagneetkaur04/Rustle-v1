@@ -2,7 +2,15 @@
 
 {% block main %}
 
+<div>
+    {% if album.is_flagged %}
+        <h3 class="flagged">FLAGGED ALBUM</h3>
+    {% endif %}
+</div>
+
 <div class="admin-album-page">
+
+
     <div class="admin-user-info ps-4">
         {% if album.is_flagged %}
             <img src="/static/images/flagged_album.png" alt="Album {{ album.album_id}} ">
@@ -11,7 +19,8 @@
         {% endif %}
 
         <h1 class="album-title">{{ album.album_name }}</h1>
-        <h6 class="genre">{{ album.genre }}</h6>
+        <h6 class="artist">By {{ artist }}</h6>
+        <h6 class="genre">Genre: {{ album.genre }}</h6>
     </div>
 
     <div class="title-button">

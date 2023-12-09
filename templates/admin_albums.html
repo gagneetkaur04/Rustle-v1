@@ -4,6 +4,7 @@
 
     <div class="admin-creator-page">
         <h1>Albums</h1>
+
         {% if current_user.is_admin %}
             <p>Total Albums: {{ album_count }}</p>
         {% endif %}
@@ -12,31 +13,50 @@
             {% if album_count == 0 %}
                 <h6 class="ms-3">No Albums Created</h6>
             {% else %}
+
                 {% for album in albums %}
                     <div class="mb-5 admin-cards">
 
                         {% if current_user.is_admin %}
-                            <a href="{{ url_for('admin_album', album_id=album.id) }}" class="card">
-                        {% else %}
-                            <a href="{{ url_for('get_album', album_id=album.id) }}" class="card">
-                        {% endif %}
 
-                            {% if album.is_flagged %}
-                                <img src="/static/images/flagged_album.png" alt="Album {{ album.album_id }} ">
-                            {% else %}
-                                <img src="/static/images/default_album.jpg" alt="Album {{ album.album_id }} ">
+                            <a href="{{ url_for('admin_album', album_id=album.id) }}" class="card">
+                                {% if album.is_flagged %}
+                                    <img src="/static/images/flagged_album.png" alt="Album {{ album.album_id }} ">
+                                {% else %}
+                                    <img src="/static/images/default_album.jpg" alt="Album {{ album.album_id }} ">
+                                {% endif %}
+
+                                <div class="overlay">
+                                    <div class="overlay-content">
+                                        <h3 class="song-title">{{ album.album_name }}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                            <h4 class="song-title mx-auto" style="width: max-content;">{{ album.album_name }}</h4>   
+
+                        {% else %}
+                            
+                            {% if not album.is_flagged %}
+                                <a href="{{ url_for('get_album', album_id=album.id) }}" class="card">
+                                    <img src="/static/images/default_album.jpg" alt="Album {{ album.album_id }} ">
+
+                                    <div class="overlay">
+                                        <div class="overlay-content">
+                                            <h3 class="song-title">{{ album.album_name }}</h3>
+                                        </div>
+                                    </div>
+                                </a>
+                                <h4 class="song-title mx-auto" style="width: max-content;">{{ album.album_name }}</h4>
                             {% endif %}
 
-                            <div class="overlay">
-                                <div class="overlay-content">
-                                    <h3 class="song-title">{{ album.album_name }}</h3>
-                                </div>
-                            </div>
-                        </a>
-                        <h4 class="song-title mx-auto" style="width: max-content;">{{ album.album_name }}</h4>             
+                        {% endif %}  
+
                     </div>
+
                 {% endfor %}
+
             {% endif %}
+            
         </div>
     
     </div>

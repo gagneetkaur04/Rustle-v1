@@ -813,6 +813,11 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .admin-album-page .genre{
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.admin-album-page .artist{
   font-size: 20px;
   margin-left: 10px;
 }
@@ -822,7 +827,7 @@ body::-webkit-scrollbar-thumb:hover {
   flex-direction: row;
   padding: 0 20px;
   width: max-content;
-  margin-top: 30px;
+  margin-top: 15px;
   margin-left: 12px;
 }
 

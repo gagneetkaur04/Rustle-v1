@@ -10,34 +10,136 @@
 
     {% else%}
 
-        <div class="admin-album-page ">
-            <h1 class="text-light">{{ album.album_name }}</h1>
+        {% if album.is_flagged %}
+            
+            {% if current_user.id==album.creator_id %}
+        
+                <h1 style="width: fit-content; margin-left:100px; margin-top:50px; color:rgb(65, 7, 7); font-weight:bolder;">Album Flagged</h1>
+                <div class="alert alert-danger" role="alert" style="width: fit-content; margin-left:100px; margin-top:20px;">
+                    Due to multiple reports, this album has been flagged. It will be reviewed by the admin.
+                </div>
 
-            {% if current_user.is_creator and current_user.id==album.creator_id %}
-                <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
-                    Edit Album
-                </button>
+                <div class="admin-album-page ">
+                    <h1 class="text-light">{{ album.album_name }}</h1>
 
-                <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
-                    Delete Album
-                </button>
+                    {% if current_user.is_creator and current_user.id==album.creator_id %}
+                        <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
+                            Edit Album
+                        </button>
+
+                        <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
+                            Delete Album
+                        </button>
+                    {% endif %}
+
+                </div>
+
+                <div class="album-songs">
+                    <ul class="song-list">
+                        {% for song in songs %}
+
+                            {% if song.Song.is_flagged %}
+                                {% if current_user.is_creator and current_user.id == song.Song.creator_id %}
+
+                                    <div class="one-song">
+                                        <li class="song-contents">
+
+                                            <h3 class="song-title">{{ song.Song.song_title }}</h3>
+                                            <strong style="color: rgb(104, 31, 31); font-size:x-large;">FLAGGED</strong>
+
+                                            <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
+                                                <button class="playsong">
+                                                    <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
+                                                </button>
+                                            </a>
+                                            
+                                        </li>
+                                        <p class="song-artist">Artist : {{ song.User.username }}</p>
+                                        <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
+                                    </div>
+                                
+                                {% endif %}
+                            
+                            {% else %}
+
+                                <div class="one-song">
+                                    <li class="song-contents">
+                                        <h3 class="song-title">{{ song.Song.song_title }}</h3>
+                        
+                                        <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
+                                            <button class="playsong">
+                                                <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
+                                            </button>
+                                        </a>
+                                        
+                                    </li>
+                                    <p class="song-artist">Artist : {{ song.User.username }}</p>
+                                    <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+                    </ul>
+                </div>
+            
+            {% else %}
+
+                <div class="alert alert-danger" role="alert">
+                    This album has been flagged. You cannot view this album.
+                </div>
+
             {% endif %}
 
-        </div>
+        {% else %}
 
-        <div class="album-songs">
-            <ul class="song-list">
-                {% for song in songs %}
+            <div class="admin-album-page ">
+                <h1 class="text-light">{{ album.album_name }}</h1>
 
-                    {% if song.Song.is_flagged %}
-                        {% if current_user.is_creator and current_user.id == song.Song.creator_id %}
+                {% if current_user.is_creator and current_user.id==album.creator_id %}
+                    <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
+                        Edit Album
+                    </button>
+
+                    <button type="button" class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteAlbumModal">
+                        Delete Album
+                    </button>
+                {% endif %}
+
+            </div>
+
+            <div class="album-songs">
+                <ul class="song-list">
+                    {% for song in songs %}
+
+                        {% if song.Song.is_flagged %}
+                            {% if current_user.is_creator and current_user.id == song.Song.creator_id %}
+
+                                <div class="one-song">
+                                    <li class="song-contents">
+
+                                        <h3 class="song-title">{{ song.Song.song_title }}</h3>
+                                        <strong style="color: rgb(104, 31, 31); font-size:x-large;">FLAGGED</strong>
+
+                                        <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
+                                            <button class="playsong">
+                                                <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
+                                            </button>
+                                        </a>
+                                        
+                                    </li>
+                                    <p class="song-artist">Artist : {{ song.User.username }}</p>
+                                    <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
+                                </div>
+                            
+                            {% endif %}
+                        
+                        {% else %}
 
                             <div class="one-song">
                                 <li class="song-contents">
-
                                     <h3 class="song-title">{{ song.Song.song_title }}</h3>
-                                    <strong style="color: rgb(104, 31, 31); font-size:x-large;">FLAGGED</strong>
-
+                    
                                     <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
                                         <button class="playsong">
                                             <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
@@ -48,31 +150,14 @@
                                 <p class="song-artist">Artist : {{ song.User.username }}</p>
                                 <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
                             </div>
-                        
+
                         {% endif %}
-                    
-                    {% else %}
 
-                        <div class="one-song">
-                            <li class="song-contents">
-                                <h3 class="song-title">{{ song.Song.song_title }}</h3>
-                
-                                <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
-                                    <button class="playsong">
-                                        <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
-                                    </button>
-                                </a>
-                                
-                            </li>
-                            <p class="song-artist">Artist : {{ song.User.username }}</p>
-                            <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
-                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
 
-                    {% endif %}
-
-                {% endfor %}
-            </ul>
-        </div>
+        {% endif %}
 
     {% endif %}
 
