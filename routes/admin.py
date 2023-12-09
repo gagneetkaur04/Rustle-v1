@@ -18,7 +18,7 @@ def admin_dashboard():
     num_creators = User.query.filter_by(is_creator=True).filter_by(is_admin=False).count()
     num_albums = Album.query.filter(Album.album_name != 'Singles').count()
 
-    avg_rating = db.session.query(db.func.avg(Rating.rating)).scalar()
+    avg_rating = db.session.query(db.func.round(db.func.avg(Rating.rating), 2)).scalar()
     artists_data = get_top_artists_data()
     artist_songs_data = get_artist_song_ratio_data()
 

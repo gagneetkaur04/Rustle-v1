@@ -17,8 +17,13 @@ def home_user():
         .join(Song, User.id == Song.creator_id)\
         .join(Album, Song.album_id == Album.id)\
         .order_by(Song.date_created.desc()).limit(5).all()
+    
+    latest_albums = db.session.query(User, Album)\
+        .join(Album, User.id == Album.creator_id)\
+        .filter(Album.album_name!='Singles')\
+        .order_by(Album.date_created.desc()).limit(5).all()
 
-    return render_template('home_user.html', user=user, latest_songs=latest_songs)
+    return render_template('home_user.html', user=user, latest_songs=latest_songs, latest_albums=latest_albums)
 
 
 # All Songs
@@ -28,7 +33,8 @@ def all_songs():
 
     user = current_user
     songs = db.session.query(User, Song)\
-        .join(Song, User.id == Song.creator_id).all()
+        .join(Song, User.id == Song.creator_id)\
+        .order_by(Song.date_created.desc()).all()
 
     return render_template('admin_songs.html', user=user, songs=songs)
 
@@ -39,7 +45,8 @@ def all_songs():
 def all_albums():
 
     user = current_user
-    albums = Album.query.filter(Album.album_name!='Singles').all()
+    albums = Album.query.filter(Album.album_name!='Singles')\
+            .order_by(Album.date_created.desc()).all()
 
     return render_template('admin_albums.html', user=user, albums=albums)
 

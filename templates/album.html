@@ -21,6 +21,7 @@
 
                 <div class="admin-album-page ">
                     <h1 class="text-light">{{ album.album_name }}</h1>
+                    <h4>By {{ artist }}</h4>
 
                     {% if current_user.is_creator and current_user.id==album.creator_id %}
                         <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">
@@ -95,6 +96,7 @@
 
             <div class="admin-album-page ">
                 <h1 class="text-light">{{ album.album_name }}</h1>
+                <h4>By {{ artist }}</h4>
 
                 {% if current_user.is_creator and current_user.id==album.creator_id %}
                     <button type="button" class="edit-button" data-bs-toggle="modal" data-bs-target="#editAlbumModal">

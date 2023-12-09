@@ -124,6 +124,7 @@ def creator_profile():
 def get_album(album_id):
 
     album= Album.query.get_or_404(album_id)
+    artist = User.query.get_or_404(album.creator_id).username
 
     songs = db.session.query(User, Song)\
         .join(Song, User.id == Song.creator_id)\
@@ -145,7 +146,12 @@ def get_album(album_id):
             return redirect(url_for('get_album', album_id=album_id))
 
     editAlbumForm.album_title.data = album.album_name
-    return render_template('album.html', user=current_user, songs=songs, album=album, editAlbumForm=editAlbumForm)
+    return render_template('album.html', 
+                           user=current_user, 
+                           songs=songs,
+                           artist=artist, 
+                           album=album, 
+                           editAlbumForm=editAlbumForm)
 
 # Delete album --> To delete the album
 @app.route('/album/<int:album_id>/delete', methods=['GET', 'POST'])

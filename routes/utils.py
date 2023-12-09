@@ -60,12 +60,13 @@ def user_growth_chart():
         date[dates[i][0].strftime('%b %d, %Y')] = User.query.with_entities(User.id).group_by(User.date_created).count() - 1
         
 
-    plt.figure(figsize=(8, 4))
+    plt.figure(figsize=(12, 6))
     plt.plot(date.keys(), date.values(), marker='o')
     plt.title('User Growth Over Time')
     plt.xlabel('Date')
     plt.ylabel('Number of Users')
     plt.yticks(range(0, max(date.values())+1, 1))
+    plt.xticks(rotation=30)
     plt.grid(True)
     return plt
 
@@ -77,12 +78,13 @@ def song_performance_chart():
     for song in songs:
         song_growth[song.song_title] = Rating.query.filter_by(song_id=song.id).count()
 
-    plt.figure(figsize=(8, 4))
+    plt.figure(figsize=(15, 8))
     plt.bar(song_growth.keys(), song_growth.values(), color='skyblue')
     plt.title('Song Performance')
     plt.xlabel('Song')
     plt.ylabel('Rating')
     plt.yticks(range(0,6))
+    plt.xticks(rotation=30)
     plt.grid(axis='y')
     return plt
 
