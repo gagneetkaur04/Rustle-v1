@@ -74,6 +74,7 @@ def admin_user_delete(user_id):
     
     user = User.query.get_or_404(user_id)
     playlists = Playlist.query.filter_by(user_id=user_id).all()
+    rating = Rating.query.filter_by(user_id=user_id).all()
 
     for playlist in playlists:
         db.session.delete(playlist)
@@ -83,12 +84,19 @@ def admin_user_delete(user_id):
         albums = Album.query.filter_by(creator_id=user_id).all()
 
         for song in songs:
+            rating = Rating.query.filter_by(song_id=song.id).all()
+            for rate in rating:
+                db.session.delete(rate)
+
             delete_audio(song.song_path)
             db.session.delete(song)
 
         for album in albums:
             db.session.delete(album)
     
+
+    for rate in rating:
+        db.session.delete(rate)
 
     db.session.delete(user)
     db.session.commit()
@@ -133,13 +141,21 @@ def admin_creator_delete(user_id):
     user = User.query.get_or_404(user_id)
     songs = Song.query.filter_by(creator_id=user_id).all()
     albums = Album.query.filter_by(creator_id=user_id).all()
+    rating = Rating.query.filter_by(user_id=user_id).all()
 
     for song in songs:
+        rating = Rating.query.filter_by(song_id=song.id).all()
+        for rate in rating:
+            db.session.delete(rate)
+
         delete_audio(song.song_path)
         db.session.delete(song)
 
     for album in albums:
         db.session.delete(album)
+
+    for rate in rating:
+        db.session.delete(rate)
 
     db.session.delete(user)
     db.session.commit()
@@ -221,6 +237,10 @@ def admin_song_delete(song_id):
         return redirect(url_for('error'))
     
     song = Song.query.get_or_404(song_id)
+    rating = Rating.query.filter_by(song_id=song_id).all()
+    for rate in rating:
+        db.session.delete(rate)
+
     delete_audio(song.song_path)
     db.session.delete(song)
     db.session.commit()
@@ -295,6 +315,10 @@ def admin_album_delete(album_id):
     songs = Song.query.filter_by(album_id=album_id).all()
     
     for song in songs:
+        rating = Rating.query.filter_by(song_id=song.id).all()
+        for rate in rating:
+            db.session.delete(rate)
+            
         delete_audio(song.song_path)
         db.session.delete(song)
         db.session.commit()
