@@ -11,9 +11,17 @@
             <div id="song-results">
                 {% if songs %}
                     {% for song in songs %}
-                        <div class="song">
-                            <strong><a href="/play_song/{{ song.id }}" class="search-a">{{ song.title }}</a></strong> by {{ song.artist }}
-                        </div>
+
+                        {% if not song.flagged %}
+                            
+                            <div class="song">
+                                <strong><a href="/play_song/{{ song.id }}" class="search-a">{{ song.title }}</a></strong> by {{ song.artist }}
+                            </div>
+
+                        {% elif song.flagged and  song_size==flag_song_count %}
+                            <p>No songs found</p>
+                        {% endif %}
+
                     {% endfor %}
                 {% else %}
                     <p>No songs found</p>

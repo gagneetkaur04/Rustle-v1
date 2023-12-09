@@ -28,20 +28,48 @@
         <div class="album-songs">
             <ul class="song-list">
                 {% for song in songs %}
-                    <div class="one-song">
-                        <li class="song-contents">
-                            <h3 class="song-title">{{ song.Song.song_title }}</h3>
-            
-                            <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
-                                <button class="playsong">
-                                    <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
-                                </button>
-                            </a>
-                            
-                        </li>
-                        <p class="song-artist">Artist : {{ song.User.username }}</p>
-                        <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
-                    </div>
+
+                    {% if song.Song.is_flagged %}
+                        {% if current_user.is_creator and current_user.id == song.Song.creator_id %}
+
+                            <div class="one-song">
+                                <li class="song-contents">
+
+                                    <h3 class="song-title">{{ song.Song.song_title }}</h3>
+                                    <strong style="color: rgb(104, 31, 31); font-size:x-large;">FLAGGED</strong>
+
+                                    <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
+                                        <button class="playsong">
+                                            <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
+                                        </button>
+                                    </a>
+                                    
+                                </li>
+                                <p class="song-artist">Artist : {{ song.User.username }}</p>
+                                <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
+                            </div>
+                        
+                        {% endif %}
+                    
+                    {% else %}
+
+                        <div class="one-song">
+                            <li class="song-contents">
+                                <h3 class="song-title">{{ song.Song.song_title }}</h3>
+                
+                                <a href="{{ url_for('get_song', song_id=song.Song.id )}}">
+                                    <button class="playsong">
+                                        <i class=" fas fa-solid fa-play" style="color: rgba(150, 182, 178, 0.777);"></i>
+                                    </button>
+                                </a>
+                                
+                            </li>
+                            <p class="song-artist">Artist : {{ song.User.username }}</p>
+                            <p>(Released on {{ song.Song.date_created.strftime('%b %d, %Y') }})</p>
+                        </div>
+
+                    {% endif %}
+
                 {% endfor %}
             </ul>
         </div>

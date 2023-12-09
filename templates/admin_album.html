@@ -29,9 +29,13 @@
     <div class="album-songs">
         <ul class="song-list">
             {% for song in songs %}
+
                 <div class="one-song">
                     <li class="song-contents">
                         <h3 class="song-title">{{ song.song_title }}</h3>
+                        {% if song.is_flagged %}
+                            <strong style="color: rgb(104, 31, 31); font-size:x-large;">FLAGGED</strong>
+                        {% endif %}
         
                         <a href="{{ url_for('admin_song', song_id=song.id )}}">
                             <button class="playsong">
@@ -40,8 +44,8 @@
                         </a>
                         
                     </li>
-                    <p class="song-artist">Artist : {{ song.creator_id }}</p>
-                    <p>(Released on {{ song.date_created.strftime('%Y-%m-%d') }})</p>
+                    <p class="song-artist">Artist : {{ artist }}</p>
+                    <p>(Released on {{ song.date_created.strftime('%b %d, %Y') }})</p>
                 </div>
             {% endfor %}
         </ul>

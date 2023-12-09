@@ -8,6 +8,12 @@
             The Artist of this song has been blacklisted. You cannot view this song.
         </div>
 
+    {% elif song.Song.is_flagged %}
+
+        <div class="alert alert-danger" role="alert">
+            This song has been flagged. You cannot view this song.
+        </div>
+        
     {% else%}
 
         <div class="music-page">

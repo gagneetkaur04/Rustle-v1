@@ -12,36 +12,51 @@
         <div class="card-container">
             {% if song_count == 0 %}
                 <h6 class="ms-3">No Songs Created</h6>
-            {% else %}
-                {% for song in songs %}
 
-                    {% if not song.User.is_blacklisted %}
+            {% else %}
+
+                {% for song in songs %}
 
                         <div class="mb-5 admin-cards">
 
-                            {% if current_user.is_admin %}                            
-                            <a href="{{ url_for('admin_song', song_id=song.Song.id) }}" class="card">
-                            {% else %}
-                            <a href="{{ url_for('play_song', song_id=song.Song.id) }}" class="card">
-                            {% endif %}
+                            {% if current_user.is_admin %}
 
+                                <a href="{{ url_for('admin_song', song_id=song.Song.id) }}" class="card">
                                 {% if song.Song.is_flagged %}
                                     <img src="/static/images/flagged_song.png" alt="Song {{ song.song_id}} ">
                                 {% else %}
                                     <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
                                 {% endif %}
 
-                                <div class="overlay">
-                                    <div class="overlay-content">
-                                        <h3 class="song-title">{{ song.Song.song_title }}</h3>
+                                    <div class="overlay">
+                                        <div class="overlay-content">
+                                            <h3 class="song-title">{{ song.Song.song_title }}</h3>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                            <h4 class="song-title mx-auto" style="width: max-content;">{{ song.Song.song_title }}</h4>             
+                                </a>
+                                <h4 class="song-title mx-auto" style="width: max-content;">{{ song.Song.song_title }}</h4>             
+
+                            {% else %}
+
+                                {% if not song.Song.is_flagged and not song.User.is_blacklisted %}
+                                    <a href="{{ url_for('play_song', song_id=song.Song.id) }}" class="card">
+                                        <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
+                                        
+                                        <div class="overlay">
+                                            <div class="overlay-content">
+                                                <h3 class="song-title">{{ song.Song.song_title }}</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <h4 class="song-title mx-auto" style="width: max-content;">{{ song.Song.song_title }}</h4>             
+                                {% endif %}
+
+                            {% endif %}
+
                         </div>
                         
-                    {% endif %}
                 {% endfor %}
+
             {% endif %}
         </div>
     

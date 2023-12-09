@@ -3,11 +3,22 @@
 {% block main %}
 
     {% if user.is_blacklisted and current_user.id==song.Song.creator_id %}
+
         <div class="alert alert-danger" role="alert">
             You are blacklisted. You cannot view this song.
         </div>
 
+        
     {% else%}
+
+        {% if song.Song.is_flagged %}
+    
+            <h1 style="width: fit-content; margin-left:100px; margin-top:50px;">Song Flagged</h1>
+            <div class="alert alert-danger" role="alert" style="width: fit-content; margin-left:100px; margin-top:20px;">
+                Due to multiple reports, this song has been flagged. It will be reviewed by the admin.
+            </div>
+        
+        {% endif %}
 
         <div class="music-page">
             <div class="song-details">

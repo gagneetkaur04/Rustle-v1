@@ -7,7 +7,7 @@
         <h1 class="text-light lt-songs-head">Latest Songs</h1>
         <ul class="song-list lt-songs">
             {% for song in latest_songs %}
-                {% if not song.User.is_blacklisted %}
+                {% if not song.User.is_blacklisted and not song.Song.is_flagged %}
                     <div class="one-song">
                         <li class="song-contents">
                             <h3 class="song-title">{{ song.Song.song_title }}</h3>

@@ -2,6 +2,12 @@
 
 {% block main %}
 
+    <div>
+        {% if song.Song.is_flagged %}
+            <h3 class="flagged">FLAGGED SONG</h3>
+        {% endif %}
+    </div>
+
     <div class="music-page">
         <div class="song-details">
         <music-card

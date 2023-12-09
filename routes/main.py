@@ -101,13 +101,32 @@ def search():
              .filter(Album.album_name.ilike(f'%{query}%') | User.username.ilike(f'%{query}%'))\
              .all()
     
+    flag_song_count = 0
+    for song in songs:
+        if song.is_flagged:
+            flag_song_count += 1
+
+    flag_album_count = 0
+    for album in albums:
+        if album.is_flagged:
+            flag_album_count += 1
+
     album_size = len(albums)
+    song_size = len(songs)
+    
 
     # Format the results
-    song_results = [{'id': song.id, 'title': song.song_title, 'artist': User.query.get(song.creator_id).username} for song in songs]
+    song_results = [{'id': song.id, 'title': song.song_title, 'artist': User.query.get(song.creator_id).username, 'flagged': song.is_flagged} for song in songs]
     album_results = [{'id': album.id, 'name': album.album_name, 'genre': album.genre, 'artist': User.query.get(album.creator_id).username} for album in albums]
 
-    return render_template('search.html', query=query, songs=song_results, albums=album_results, album_size=album_size)
+    return render_template('search.html', 
+                           query=query, 
+                           songs=song_results, 
+                           albums=album_results, 
+                           album_size=album_size,
+                           song_size=song_size,
+                           flag_song_count=flag_song_count,
+                           flag_album_count=flag_album_count)
 
 
 # Error Page

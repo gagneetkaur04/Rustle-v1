@@ -64,7 +64,7 @@ def get_user_count():
     return len(users)
 
 def get_album_count():
-    albums = Album.query.all()
+    albums = Album.query.filter(Album.album_name != 'Singles').all()
     return len(albums) 
 
 def song_charts():

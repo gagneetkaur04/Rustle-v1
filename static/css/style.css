@@ -189,6 +189,12 @@ span a:hover{
   background-color: #ffffffe7;
 }
 
+.head-username{
+  margin-right: 10px;
+  margin-top: 7px;
+  color: rgba(255, 255, 255, 0.534)
+}
+
 input[type="search"]::placeholder {
   color: rgb(144, 191, 189)lace #999;
 }
@@ -318,6 +324,7 @@ input[type="search"]::placeholder {
 
 .music-page{
   margin: 50px;
+  margin-left: 100px;
   display: flex;
   flex-direction: row;
   height: 70vh;  
@@ -894,6 +901,18 @@ body::-webkit-scrollbar-thumb:hover {
   margin-top: 20px;
 }
 
+
+.flagged{
+  background-color: #aa0b0b;
+  border: none;
+  color: rgb(255, 255, 255);
+  padding: 5px 10px;
+  text-align: center;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 8px;
+  font-weight: bold;
+}
 
 /* --------------------------SEARCH--------------------------------  */
 

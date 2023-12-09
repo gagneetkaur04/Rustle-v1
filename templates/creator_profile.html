@@ -264,7 +264,13 @@
                         {% for song in songs %}
                         <div>
                             <a href="{{ url_for('get_song', song_id=song.id) }}" class="card">
-                                <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
+
+                                {% if song.is_flagged %}
+                                    <img src="/static/images/flagged_song.png" alt="Song {{ song.song_id}} ">
+                                {% else %}
+                                    <img src="/static/images/default_song.jpg" alt="Song {{ song.song_id}} ">
+                                {% endif %}
+
                                 <div class="overlay">
                                     <div class="overlay-content">
                                         <h3 class="song-title">{{ song.song_title }}</h3>
