@@ -61,11 +61,11 @@ class SongForm(FlaskForm):
     submit = SubmitField('Create Song')
 
     def validate_file(self, audio_file):
-        allowed_extensions = ['mp3']
+        allowed_extensions = ['mp3', 'm4a', 'wav']
         if audio_file.data:
             file_ext = audio_file.data.filename.rsplit('.', 1)[1].lower()
             if file_ext not in allowed_extensions:
-                raise ValidationError('File must be in MP3 format')
+                raise ValidationError('File must be in MP3, WAV or M4A format')
 
 class EditSongForm(FlaskForm):
     song_title = StringField('Song Title', validators=[DataRequired()])
