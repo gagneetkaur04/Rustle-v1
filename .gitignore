@@ -1,6 +1,5 @@
 myenv/*
 instance/*
 __pycache__/*
-static/audios/*
 routes/__pycache__
 XTRAS/*
