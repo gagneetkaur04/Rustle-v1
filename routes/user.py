@@ -16,14 +16,11 @@ def home_user():
     latest_songs = db.session.query(User, Song, Album)\
         .join(Song, User.id == Song.creator_id)\
         .join(Album, Song.album_id == Album.id)\
-        .order_by(Song.date_created.desc()).limit(5).all()
+        .order_by(Song.date_created.desc()).limit(10).all()
     
-    latest_albums = db.session.query(User, Album)\
-        .join(Album, User.id == Album.creator_id)\
-        .filter(Album.album_name!='Singles')\
-        .order_by(Album.date_created.desc()).limit(5).all()
 
-    return render_template('home_user.html', user=user, latest_songs=latest_songs, latest_albums=latest_albums)
+
+    return render_template('home_user.html', user=user, latest_songs=latest_songs)
 
 
 # All Songs

@@ -26,24 +26,6 @@
                 {% endif %}
             {% endfor %}
         </ul>
-
-        <h1 class="text-light lt-albums-head">Latest Albums</h1>
-        <ul class="song-list lt-songs">
-            {% for album in latest_albums %}
-                {% if not album.User.is_blacklisted and not album.Album.is_flagged %}
-                <a href="{{ url_for('get_album', album_id=album.Album.id )}}">
-                    <div class="one-song">
-                        <li class="song-contents">
-                            <h3 class="song-title">{{ album.Album.album_name }}</h3>    
-                        </li>
-                        <p class="song-artist">Artist : {{ album.User.username }}</p> 
-                        <p>(Released on {{ album.Album.date_created.strftime('%b %d, %Y') }})</p>
-                    </div>
-                </a>
-                {% endif %}
-            {% endfor %}
-        </ul>
-
     </div>
         
 {% endblock %}
