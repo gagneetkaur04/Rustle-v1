@@ -74,12 +74,17 @@ def song_performance_chart():
 
     songs = Song.query.all()
 
-    song_growth = {}
-    for song in songs:
-        song_growth[song.song_title] = Rating.query.filter_by(song_id=song.id).count()
+    song_data = db.session.query(Song.song_title, db.func.avg(Rating.rating).label('avg_rating')) \
+        .join(Rating, Song.id == Rating.song_id) \
+        .group_by(Song.id) \
+        .order_by(db.desc('avg_rating')) \
+        .all()
+
+    song_names = [data[0] for data in song_data]
+    avg_ratings = [data[1] for data in song_data]
 
     plt.figure(figsize=(15, 8))
-    plt.bar(song_growth.keys(), song_growth.values(), color='skyblue')
+    plt.bar(song_names, avg_ratings, color='skyblue')
     plt.title('Song Performance')
     plt.xlabel('Song')
     plt.ylabel('Rating')
