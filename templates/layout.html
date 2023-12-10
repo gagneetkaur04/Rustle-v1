@@ -84,7 +84,7 @@
                         {% if not current_user.is_creator %}
                           <li><a class="dropdown-item" href="{{ url_for('become_artist')  }}">Become Artist</a></li>
                           {% else %}
-                          <li><a class="dropdown-item" href="{{ url_for('creator_profile')  }}">My Artist Profile</a></li>
+                          <li><a class="dropdown-item" href="{{ url_for('creator_profile')  }}">My Artist Studio</a></li>
                         {% endif %}
           
                         <li>
