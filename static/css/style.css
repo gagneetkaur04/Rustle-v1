@@ -459,7 +459,7 @@ input[type="search"]::placeholder {
   display: flex;
   flex-wrap: wrap;
   align-self: center;
-  margin: 30px;
+  margin-right: 75px;
 }
 
 .card {

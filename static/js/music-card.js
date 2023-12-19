@@ -61,9 +61,6 @@ class MusicCard extends HTMLElement {
                     <h2>${this.getAttribute('title')}</h2>
                     <p>${this.getAttribute('artist')}</p>
                 </div>
-            <button type="button" class="circular-button" data-bs-toggle="modal" data-bs-target="#addToPlaylistModal">
-                <img src="/static/images/playlist-add-1-32.png" alt=""> 
-            </button>
             </div>
             <audio controls>
                 <source src="${this.getAttribute('audio')}" type="audio/mp3">
