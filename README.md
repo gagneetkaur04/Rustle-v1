@@ -1,3 +1,7 @@
+## About the App
+Rustle is a music streaming app that is designed to provide users with a seamless and immersive listening experience. With Rustle, users can enjoy a vast library of songs, create custom playlists, access albums, and even have the opportunity to register as an artist to showcase their own musical talents.
+
+
 Open the app folder in terminal and write the following commands:
 
 Command 1:
